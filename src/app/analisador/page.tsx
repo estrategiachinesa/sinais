@@ -15,7 +15,7 @@ import { AnimatedBackground } from '@/components/app/animated-background';
 import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
 import { Button } from '@/components/ui/button';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Download } from 'lucide-react';
 
 export type FormData = {
   asset: string;
@@ -75,6 +75,12 @@ export default function AnalisadorPage() {
                  <a href={affiliateLink} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Cadastrar agora
+                </a>
+               </AlertDialogAction>
+               <AlertDialogAction asChild>
+                 <a href="https://traderchines.github.io/vip/" target="_blank" rel="noopener noreferrer">
+                    <Download className="mr-2 h-4 w-4" />
+                    Baixar o indicador
                 </a>
                </AlertDialogAction>
             </AlertDialogFooter>
