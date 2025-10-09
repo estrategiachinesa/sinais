@@ -28,7 +28,7 @@ export default function GatePage() {
       <div className="flex flex-col min-h-screen items-center justify-center text-center p-4">
         <main className="w-full max-w-lg space-y-6">
           <div className="flex justify-center">
-            <AlertTriangle className="h-12 w-12 text-primary" />
+            <AlertTriangle className="h-12 w-12 text-destructive" />
           </div>
           <h1 className="text-2xl font-bold text-foreground">
             Atenção!
@@ -38,7 +38,7 @@ export default function GatePage() {
           </p>
           <Button
             size="lg"
-            className="w-full h-14 text-lg font-bold bg-accent hover:bg-accent/90 text-accent-foreground"
+            className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground"
             onClick={handleClick}
             disabled={isRedirecting}
           >
