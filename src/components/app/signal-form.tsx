@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { BarChart, Loader2 } from 'lucide-react';
-import type { FormData } from '@/app/page';
+import type { FormData } from '@/app/analisador/page';
 
 type SignalFormProps = {
   formData: FormData;
@@ -23,7 +23,7 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
     <div className="w-full max-w-md space-y-8 text-center">
       <div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-headline">
-          📈 Sinais da Estratégia Chinesa
+          GERADOR DE SINAIS
         </h1>
         <p className="mt-4 text-lg text-foreground/80">
           Escolha o ativo e receba sinais automáticos em tempo real.
