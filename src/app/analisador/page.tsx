@@ -76,7 +76,7 @@ export default function AnalisadorPage() {
             </AlertDialogHeader>
             <AlertDialogFooter>
                <AlertDialogAction asChild>
-                 <a href={affiliateLink} target="_blank" rel="noopener noreferrer">
+                 <a href={affiliateLink} target="_blank" rel="noopener noreferrer" className="bg-blue-600 hover:bg-blue-700">
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Cadastrar agora
                 </a>
@@ -91,7 +91,7 @@ export default function AnalisadorPage() {
           </AlertDialogContent>
         </AlertDialog>
 
-        <footer className="p-4 text-center text-[0.7rem] text-foreground/50">
+        <footer className="p-4 text-center text-[0.6rem] text-foreground/30">
           <p>© 2025 Estratégia Chinesa. </p>
           <p>Todos os direitos reservados.</p>
           <p className="max-w-xl mx-auto">Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.</p>
