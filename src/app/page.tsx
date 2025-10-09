@@ -55,7 +55,7 @@ export default function GatePage() {
             </p>
            )}
         </main>
-        <footer className="absolute bottom-4 text-center text-xs text-foreground/50 w-full px-4">
+        <footer className="absolute bottom-4 text-center text-[0.7rem] text-foreground/50 w-full px-4">
           <p>© 2025 Estratégia Chinesa. </p>
           <p>Todos os direitos reservados.</p>
           <p className="max-w-xl mx-auto">Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.</p>
