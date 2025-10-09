@@ -67,7 +67,9 @@ export default function AnalisadorPage() {
             <AlertDialogHeader>
               <AlertDialogTitle>Falha ao analisar ❌</AlertDialogTitle>
               <AlertDialogDescription>
-                Não encontramos seu cadastro no sistema. É preciso se cadastrar e realizar um depósito de qualquer valor para gerar os sinais.
+                Não encontramos seu cadastro no sistema.
+                <br/>
+                É preciso se cadastrar e realizar um depósito de qualquer valor para gerar os sinais.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
