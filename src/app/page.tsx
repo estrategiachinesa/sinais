@@ -8,8 +8,11 @@ import type { SimulatedTradingSignalOutput } from '@/ai/flows/generate-simulated
 import { AnimatedBackground } from '@/components/app/animated-background';
 import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
-import { LoadingAnalysis } from '@/components/app/loading-analysis';
 import { SignalResult } from '@/components/app/signal-result';
+import {
+  Dialog,
+  DialogContent,
+} from '@/components/ui/dialog';
 
 export type FormData = {
   asset: string;
@@ -18,10 +21,11 @@ export type FormData = {
 
 export type SignalData = FormData & SimulatedTradingSignalOutput;
 
-type AppState = 'form' | 'loading' | 'result';
+type AppState = 'idle' | 'loading';
 
 export default function Home() {
-  const [appState, setAppState] = useState<AppState>('form');
+  const [appState, setAppState] = useState<AppState>('idle');
+  const [isResultOpen, setIsResultOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/USD',
     expirationTime: '1m',
@@ -33,22 +37,20 @@ export default function Home() {
     setAppState('loading');
 
     const analysisPromise = generateSimulatedTradingSignal({
-        expirationTime: formData.expirationTime === '1m' ? '1 minute' : '5 minutes',
+      expirationTime: formData.expirationTime === '1m' ? '1 minute' : '5 minutes',
     });
 
-    // Enforce a minimum loading time for better UX
     const minLoadingTimePromise = new Promise(resolve => setTimeout(resolve, 3000));
 
     try {
-        const [signalResult] = await Promise.all([analysisPromise, minLoadingTimePromise]);
-        
-        if (signalResult) {
-            setSignalData({ ...formData, ...signalResult });
-            setAppState('result');
-        } else {
-            throw new Error('Não foi possível gerar o sinal.');
-        }
+      const [signalResult] = await Promise.all([analysisPromise, minLoadingTimePromise]);
 
+      if (signalResult) {
+        setSignalData({ ...formData, ...signalResult });
+        setIsResultOpen(true);
+      } else {
+        throw new Error('Não foi possível gerar o sinal.');
+      }
     } catch (error) {
       console.error(error);
       toast({
@@ -56,32 +58,15 @@ export default function Home() {
         title: 'Erro na Análise',
         description: 'Ocorreu um problema ao gerar o sinal. Tente novamente.',
       });
-      setAppState('form');
+    } finally {
+      setAppState('idle');
     }
   };
 
   const handleReset = () => {
-    setAppState('form');
-    setSignalData(null);
-  };
-  
-  const renderContent = () => {
-    switch (appState) {
-      case 'loading':
-        return <LoadingAnalysis />;
-      case 'result':
-        return signalData && <SignalResult data={signalData} onReset={handleReset} />;
-      case 'form':
-      default:
-        return (
-          <SignalForm
-            formData={formData}
-            setFormData={setFormData}
-            onSubmit={handleAnalyze}
-            isLoading={appState === 'loading'}
-          />
-        );
-    }
+    setIsResultOpen(false);
+    // Delay setting signalData to null to allow for exit animation
+    setTimeout(() => setSignalData(null), 300);
   };
 
   return (
@@ -93,8 +78,19 @@ export default function Home() {
         </header>
 
         <main className="flex-grow flex items-center justify-center p-4">
-          {renderContent()}
+          <SignalForm
+            formData={formData}
+            setFormData={setFormData}
+            onSubmit={handleAnalyze}
+            isLoading={appState === 'loading'}
+          />
         </main>
+        
+        <Dialog open={isResultOpen} onOpenChange={setIsResultOpen}>
+          <DialogContent className="bg-transparent border-0 shadow-none p-0 max-w-md w-full">
+            {signalData && <SignalResult data={signalData} onReset={handleReset} />}
+          </DialogContent>
+        </Dialog>
 
         <footer className="p-4 text-center text-xs text-muted-foreground">
           <p>

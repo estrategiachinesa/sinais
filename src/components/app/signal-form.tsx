@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { BarChart } from 'lucide-react';
+import { BarChart, Loader2 } from 'lucide-react';
 import type { FormData } from '@/app/page';
 
 type SignalFormProps = {
@@ -66,8 +66,12 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
         onClick={onSubmit}
         disabled={isLoading}
       >
-        <BarChart className="mr-2 h-5 w-5" />
-        Analisar Mercado
+        {isLoading ? (
+          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+        ) : (
+          <BarChart className="mr-2 h-5 w-5" />
+        )}
+        {isLoading ? 'Analisando...' : 'Analisar Mercado'}
       </Button>
     </div>
   );
