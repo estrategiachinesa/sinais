@@ -49,7 +49,7 @@ export default function AnalisadorPage() {
     <>
       <AnimatedBackground />
       <div className="flex flex-col min-h-screen">
-        <header className="p-4 flex justify-end">
+        <header className="p-4 flex justify-center">
           <OnlineTraders />
         </header>
 

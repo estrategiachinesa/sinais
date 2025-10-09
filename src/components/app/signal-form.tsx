@@ -23,7 +23,7 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
     <div className="w-full max-w-md space-y-8 text-center">
       <div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-headline">
-          GERADOR DE SINAIS DA<br />ESTRATÉGIA CHINESA
+          SINAIS DA<br />ESTRATÉGIA CHINESA
         </h1>
         <p className="mt-4 text-lg text-foreground/80">
           Escolha o ativo e receba sinais automáticos em tempo real.
