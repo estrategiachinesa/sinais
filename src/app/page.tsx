@@ -46,10 +46,10 @@ export default function GatePage() {
             Você será redirecionado em alguns segundos...
           </p>
         </main>
-        <footer className="absolute bottom-4 text-center text-xs text-muted-foreground">
-          <p>
-            © 2025 Estratégia Chinesa. Todos os direitos reservados.  Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.
-          </p>
+        <footer className="absolute bottom-4 text-center text-xs text-muted-foreground w-full px-4">
+          <p>© 2025 Estratégia Chinesa. </p>
+          <p>Todos os direitos reservados.</p>
+          <p className="max-w-xl mx-auto">Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.</p>
         </footer>
       </div>
     </>

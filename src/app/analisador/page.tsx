@@ -82,9 +82,9 @@ export default function AnalisadorPage() {
         </AlertDialog>
 
         <footer className="p-4 text-center text-xs text-muted-foreground">
-          <p>
-            © 2025 Estratégia Chinesa. Todos os direitos reservados.  Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.
-          </p>
+          <p>© 2025 Estratégia Chinesa. </p>
+          <p>Todos os direitos reservados.</p>
+          <p>Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.</p>
         </footer>
       </div>
     </>
