@@ -83,7 +83,7 @@ export default function AnalisadorPage() {
 
         <footer className="p-4 text-center text-xs text-muted-foreground">
           <p>
-            Os sinais exibidos são gerados automaticamente para fins ilustrativos. Faça sua própria análise.
+            © 2025 Estratégia Chinesa. Todos os direitos reservados.  Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.
           </p>
         </footer>
       </div>
