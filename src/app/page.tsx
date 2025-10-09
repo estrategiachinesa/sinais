@@ -1,22 +1,26 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, AlertTriangle } from 'lucide-react';
+import { ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
 import { AnimatedBackground } from '@/components/app/animated-background';
 
 export default function GatePage() {
   const router = useRouter();
   const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  const handleClick = () => {
+    setIsRedirecting(true);
+    // Opens the affiliate link in a new tab
+    window.open(affiliateLink, '_blank', 'noopener,noreferrer');
+    
+    // Starts the countdown to redirect to the analyzer page
+    setTimeout(() => {
       router.push('/analisador');
     }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [router]);
+  };
 
   return (
     <>
@@ -33,18 +37,23 @@ export default function GatePage() {
             Para gerar os sinais, você deve se cadastrar na plataforma e realizar um depósito de qualquer valor.
           </p>
           <Button
-            asChild
             size="lg"
             className="w-full h-14 text-lg font-bold bg-accent hover:bg-accent/90 text-accent-foreground"
+            onClick={handleClick}
+            disabled={isRedirecting}
           >
-            <a href={affiliateLink} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="mr-2 h-5 w-5" />
-              Abrir a Corretora
-            </a>
+            {isRedirecting ? (
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            ) : (
+                <ExternalLink className="mr-2 h-5 w-5" />
+            )}
+            Abrir a Corretora
           </Button>
-           <p className="text-sm text-muted-foreground animate-pulse">
-            Você será redirecionado em alguns segundos...
-          </p>
+           {isRedirecting && (
+            <p className="text-sm text-muted-foreground animate-pulse">
+                Você será redirecionado em alguns segundos...
+            </p>
+           )}
         </main>
         <footer className="absolute bottom-4 text-center text-xs text-muted-foreground w-full px-4">
           <p>© 2025 Estratégia Chinesa. </p>
