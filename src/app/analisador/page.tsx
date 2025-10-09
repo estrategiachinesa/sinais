@@ -54,12 +54,14 @@ export default function AnalisadorPage() {
         </header>
 
         <main className="flex-grow flex items-center justify-center p-4">
-          <SignalForm
-            formData={formData}
-            setFormData={setFormData}
-            onSubmit={handleAnalyze}
-            isLoading={appState === 'loading'}
-          />
+          <div className="w-full max-w-md bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg">
+             <SignalForm
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleAnalyze}
+                isLoading={appState === 'loading'}
+              />
+          </div>
         </main>
         
         <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
