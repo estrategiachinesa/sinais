@@ -78,7 +78,7 @@ export default function AnalisadorPage() {
                 </a>
                </AlertDialogAction>
                <AlertDialogAction asChild>
-                 <a href="https://traderchines.github.io/vip/" target="_blank" rel="noopener noreferrer">
+                 <a href="https://traderchines.github.io/vip/">
                     <Download className="mr-2 h-4 w-4" />
                     Baixar o indicador
                 </a>
