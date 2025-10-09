@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { generateSimulatedTradingSignal, type SimulatedTradingSignalOutput } from '@/ai/flows/generate-simulated-trading-signal';
+import { generateSimulatedTradingSignal } from '@/ai/flows/generate-simulated-trading-signal';
+import type { SimulatedTradingSignalOutput } from '@/ai/flows/generate-simulated-trading-signal';
 
 import { AnimatedBackground } from '@/components/app/animated-background';
 import { OnlineTraders } from '@/components/app/online-traders';
