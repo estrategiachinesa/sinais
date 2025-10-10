@@ -21,7 +21,7 @@ export default function GatePage() {
     // Starts the countdown to redirect to the analyzer page
     setTimeout(() => {
       router.push('/analisador');
-    }, 3000);
+    }, 2000);
   };
 
   return (
