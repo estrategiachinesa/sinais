@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
 import { AnimatedBackground } from '@/components/app/animated-background';
+import { CustomVideoPlayer } from '@/components/app/custom-video-player';
+
 
 export default function GatePage() {
   const router = useRouter();
@@ -60,19 +62,13 @@ export default function GatePage() {
               <h2 className="text-lg font-semibold text-foreground">
                 Instruções
               </h2>
-              <div className="aspect-video w-full">
-                <iframe
-                  className="w-full h-full rounded-lg"
-                  src="https://www.youtube.com/embed/1iAgu5fAod0"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+              <div className="aspect-video w-full rounded-lg overflow-hidden">
+                <CustomVideoPlayer url="https://youtu.be/1iAgu5fAod0" />
               </div>
             </div>
           </div>
         </main>
-        <footer className="w-full text-center text-xs text-foreground/50 p-4">
+        <footer className="w-full text-center text-[0.6rem] text-foreground/50 p-4">
           <p>© 2025 Estratégia Chinesa. </p>
           <p>Todos os direitos reservados.</p>
           <p className="max-w-xl mx-auto mt-2">Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.</p>
