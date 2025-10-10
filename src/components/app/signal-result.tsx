@@ -56,7 +56,7 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
           </div>
           <div className="text-center font-bold text-xl pt-2">
             {data.countdown !== null && data.countdown > 0 ? (
-                <p>Iniciando em: {data.countdown}s</p>
+                <p>Iniciar em: <span className="text-yellow-400">{data.countdown}s</span></p>
             ) : (
                 <p>⏱️ Operação iniciada!</p>
             )}
