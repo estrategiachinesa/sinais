@@ -93,7 +93,12 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
             <Download className="ml-2 h-5 w-5" />
           </a>
         </Button>
-        <Button variant="outline" onClick={onReset} className="w-full">
+        <Button 
+          variant="outline" 
+          onClick={onReset} 
+          className="w-full"
+          disabled={data.operationStatus === 'pending'}
+        >
             <RefreshCw className="mr-2 h-4 w-4" />
             Analisar Novamente
         </Button>
