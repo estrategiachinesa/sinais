@@ -106,7 +106,7 @@ export default function AnalisadorPage() {
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Cadastrar agora
                 </a>
-                 <a href="https://traderchines.github.io/vip/" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-green-600 hover:bg-green-700")}>
+                 <a href="https://traderchines.github.io/vip/" className={cn(buttonVariants(), "bg-green-600 hover:bg-green-700")}>
                     <Download className="mr-2 h-4 w-4" />
                     Baixar o indicador
                 </a>
