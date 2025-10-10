@@ -37,7 +37,7 @@ export default function GatePage() {
               Atenção!
             </h1>
             <p className="text-lg text-foreground/80">
-              Para gerar os sinais, você deve se cadastrar na plataforma e realizar um depósito de qualquer valor.
+              Para gerar os sinais da Estratégia Chinesa, você deve se cadastrar na plataforma e realizar um depósito de qualquer valor.
             </p>
             <Button
               size="lg"
