@@ -2,7 +2,7 @@
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, RefreshCw } from 'lucide-react';
+import { Download, RefreshCw } from 'lucide-react';
 import type { SignalData } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
 
@@ -14,7 +14,7 @@ type SignalResultProps = {
 
 export function SignalResult({ data, onReset }: SignalResultProps) {
   const isCall = data.signal.includes('CALL');
-  const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
+  const indicatorLink = 'https://traderchines.github.io/vip/';
 
   return (
     <div className="w-full max-w-md space-y-6 text-center">
@@ -70,9 +70,9 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
           size="lg"
           className="w-full h-14 text-lg font-bold bg-accent hover:bg-accent/90 text-accent-foreground"
         >
-          <a href={affiliateLink} target="_blank" rel="noopener noreferrer">
-            Abrir Corretora
-            <ExternalLink className="ml-2 h-5 w-5" />
+          <a href={indicatorLink} target="_blank" rel="noopener noreferrer">
+            Baixar o indicador
+            <Download className="ml-2 h-5 w-5" />
           </a>
         </Button>
         <Button variant="outline" onClick={onReset} className="w-full">
