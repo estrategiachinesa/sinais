@@ -24,12 +24,16 @@ export type FormData = {
   expirationTime: '1m' | '5m';
 };
 
+export type OperationStatus = 'pending' | 'active' | 'finished';
+
 export type SignalData = {
   asset: 'EUR/USD' | 'EUR/JPY';
   expirationTime: '1m' | '5m';
   signal: 'CALL 🔼' | 'PUT 🔽';
   targetTime: string;
   countdown: number | null;
+  operationCountdown: number | null;
+  operationStatus: OperationStatus;
 };
 
 type AppState = 'idle' | 'loading' | 'result';
@@ -47,19 +51,44 @@ export default function AnalisadorPage() {
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
-    if (appState === 'result' && signalData && signalData.countdown !== null && signalData.countdown > 0) {
-      timer = setInterval(() => {
-        setSignalData(prevData => {
-          if (prevData && prevData.countdown !== null && prevData.countdown > 1) {
-            return { ...prevData, countdown: prevData.countdown - 1 };
-          }
-          if (prevData && prevData.countdown !== null && prevData.countdown <= 1) {
-            clearInterval(timer);
-            return { ...prevData, countdown: 0 };
-          }
-          return prevData;
-        });
-      }, 1000);
+
+    if (appState === 'result' && signalData) {
+      // First countdown (until operation starts)
+      if (signalData.operationStatus === 'pending' && signalData.countdown !== null && signalData.countdown > 0) {
+        timer = setInterval(() => {
+          setSignalData(prevData => {
+            if (prevData && prevData.countdown !== null && prevData.countdown > 1) {
+              return { ...prevData, countdown: prevData.countdown - 1 };
+            }
+            if (prevData && prevData.countdown !== null && prevData.countdown <= 1) {
+              clearInterval(timer);
+              const operationDuration = prevData.expirationTime === '1m' ? 60 : 300;
+              return { 
+                ...prevData, 
+                countdown: 0, 
+                operationStatus: 'active',
+                operationCountdown: operationDuration
+              };
+            }
+            return prevData;
+          });
+        }, 1000);
+      }
+      // Second countdown (operation duration)
+      else if (signalData.operationStatus === 'active' && signalData.operationCountdown !== null && signalData.operationCountdown > 0) {
+        timer = setInterval(() => {
+            setSignalData(prevData => {
+                if(prevData && prevData.operationCountdown !== null && prevData.operationCountdown > 1) {
+                    return { ...prevData, operationCountdown: prevData.operationCountdown - 1};
+                }
+                if (prevData && prevData.operationCountdown !== null && prevData.operationCountdown <= 1) {
+                    clearInterval(timer);
+                    return { ...prevData, operationCountdown: 0, operationStatus: 'finished' };
+                }
+                return prevData;
+            })
+        }, 1000);
+      }
     }
     return () => clearInterval(timer);
   }, [appState, signalData]);
@@ -96,6 +125,8 @@ export default function AnalisadorPage() {
         signal: randomSignal,
         targetTime: targetTimeString,
         countdown: countdown,
+        operationCountdown: null,
+        operationStatus: 'pending'
       });
 
       setAppState('result');
@@ -145,7 +176,7 @@ export default function AnalisadorPage() {
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Cadastrar agora
                 </a>
-                 <a href="https://traderchines.github.io/vip/" className={cn(buttonVariants(), "bg-green-600 hover:bg-green-700")}>
+                 <a href="https://traderchines.github.io/vip/" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-green-600 hover:bg-green-700")}>
                     <Download className="mr-2 h-4 w-4" />
                     Baixar o indicador
                 </a>

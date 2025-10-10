@@ -6,7 +6,6 @@ import { Download, RefreshCw } from 'lucide-react';
 import type { SignalData } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
 
-
 type SignalResultProps = {
   data: SignalData;
   onReset: () => void;
@@ -15,6 +14,29 @@ type SignalResultProps = {
 export function SignalResult({ data, onReset }: SignalResultProps) {
   const isCall = data.signal.includes('CALL');
   const indicatorLink = 'https://traderchines.github.io/vip/';
+  
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+
+  const renderStatus = () => {
+    if (data.operationStatus === 'pending' && data.countdown !== null && data.countdown > 0) {
+      return <p>Iniciar em: <span className="text-yellow-400">{data.countdown}s</span></p>;
+    }
+    if (data.operationStatus === 'active' && data.operationCountdown !== null && data.operationCountdown > 0) {
+        return <p>Finalizando em: <span className="text-yellow-400">{formatTime(data.operationCountdown)}</span></p>
+    }
+    if (data.operationStatus === 'active' && (data.operationCountdown === 0 || data.operationCountdown === null)) {
+         return <p>⏱️ Operação iniciada!</p>;
+    }
+    if (data.operationStatus === 'finished') {
+        return <p>✅ Operação finalizada!</p>
+    }
+     return <p>⏱️ Operação iniciada!</p>;
+  };
+
 
   return (
     <div className="w-full max-w-md space-y-6 text-center">
@@ -55,11 +77,7 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
             <span className="font-bold">{data.targetTime}</span>
           </div>
           <div className="text-center font-bold text-xl pt-2">
-            {data.countdown !== null && data.countdown > 0 ? (
-                <p>Iniciar em: <span className="text-yellow-400">{data.countdown}s</span></p>
-            ) : (
-                <p>⏱️ Operação iniciada!</p>
-            )}
+             {renderStatus()}
           </div>
         </CardContent>
       </Card>
