@@ -26,7 +26,7 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
           SINAIS DA<br />ESTRATÉGIA CHINESA
         </h1>
         <p className="mt-4 text-lg text-foreground/80">
-          Escolha o ativo e receba sinais automáticos em tempo real.
+          Escolha o ativo e o tempo de expiração para receber sinais automáticos em tempo real.
         </p>
       </div>
 
