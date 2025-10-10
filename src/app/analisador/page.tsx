@@ -16,17 +16,28 @@ import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Download } from 'lucide-react';
+import { generateSimulatedTradingSignal } from '@/ai/flows/generate-simulated-trading-signal';
+import { SignalResult } from '@/components/app/signal-result';
 
 export type FormData = {
-  asset: string;
+  asset: 'EUR/USD' | 'EUR/JPY';
   expirationTime: '1m' | '5m';
 };
 
-type AppState = 'idle' | 'loading';
+export type SignalData = {
+  asset: 'EUR/USD' | 'EUR/JPY';
+  expirationTime: '1m' | '5m';
+  signal: 'CALL 🔼' | 'PUT 🔽';
+  targetTime: string;
+}
+
+type AppState = 'idle' | 'loading' | 'result';
 
 export default function AnalisadorPage() {
   const [appState, setAppState] = useState<AppState>('idle');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [signalData, setSignalData] = useState<SignalData | null>(null);
+
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/USD',
     expirationTime: '1m',
@@ -37,12 +48,23 @@ export default function AnalisadorPage() {
   const handleAnalyze = async () => {
     setAppState('loading');
 
-    // Simulate analysis time
-    setTimeout(() => {
-        setAppState('idle');
-        setIsAlertOpen(true);
-    }, 3000);
+    try {
+      const expirationMap = { '1m': '1 minute', '5m': '5 minutes' };
+      const result = await generateSimulatedTradingSignal({
+        expirationTime: expirationMap[formData.expirationTime] as '1 minute' | '5 minutes',
+      });
+      setSignalData({ ...formData, ...result });
+      setAppState('result');
+    } catch (error) {
+      console.error(error);
+      setIsAlertOpen(true);
+      setAppState('idle');
+    }
+  };
 
+  const handleReset = () => {
+    setAppState('idle');
+    setSignalData(null);
   };
 
   return (
@@ -55,12 +77,16 @@ export default function AnalisadorPage() {
 
         <main className="flex-grow flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg">
-             <SignalForm
+             {appState !== 'result' ? (
+              <SignalForm
                 formData={formData}
                 setFormData={setFormData}
                 onSubmit={handleAnalyze}
                 isLoading={appState === 'loading'}
               />
+             ) : (
+              signalData && <SignalResult data={signalData} onReset={handleReset} />
+             )}
           </div>
         </main>
         

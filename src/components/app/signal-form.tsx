@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { BarChart, Loader2 } from 'lucide-react';
 import type { FormData } from '@/app/analisador/page';
+import { CurrencyFlags } from './currency-flags';
 
 type SignalFormProps = {
   formData: FormData;
@@ -37,11 +38,26 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
           disabled={isLoading}
         >
           <SelectTrigger className="h-12 text-base">
-            <SelectValue placeholder="Selecione o Ativo" />
+            <SelectValue asChild>
+                <div className="flex items-center gap-2">
+                    <CurrencyFlags asset={formData.asset} />
+                    <span>{formData.asset}</span>
+                </div>
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="EUR/USD">EUR/USD</SelectItem>
-            <SelectItem value="EUR/JPY">EUR/JPY</SelectItem>
+            <SelectItem value="EUR/USD">
+                 <div className="flex items-center gap-2">
+                    <CurrencyFlags asset="EUR/USD" />
+                    <span>EUR/USD</span>
+                </div>
+            </SelectItem>
+            <SelectItem value="EUR/JPY">
+                <div className="flex items-center gap-2">
+                    <CurrencyFlags asset="EUR/JPY" />
+                    <span>EUR/JPY</span>
+                </div>
+            </SelectItem>
           </SelectContent>
         </Select>
 

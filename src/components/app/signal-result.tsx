@@ -3,7 +3,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Clock, Timer, CandlestickChart } from 'lucide-react';
-import type { SignalData } from '@/app/page';
+import type { SignalData } from '@/app/analisador/page';
+import { CurrencyFlags } from './currency-flags';
+
 
 type SignalResultProps = {
   data: SignalData;
@@ -37,7 +39,10 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
           </div>
           <div className="flex justify-between items-center p-3 rounded-lg bg-card/50">
             <span className="flex items-center gap-2 text-muted-foreground"><CandlestickChart className="h-5 w-5"/> Ativo</span>
-            <span className="font-bold">{data.asset}</span>
+            <span className="font-bold flex items-center gap-2">
+                <CurrencyFlags asset={data.asset} />
+                {data.asset}
+            </span>
           </div>
           <div
             className={`flex justify-between items-center p-4 rounded-lg text-2xl font-bold ${
