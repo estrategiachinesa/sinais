@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,7 +16,6 @@ import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { ExternalLink, Download } from 'lucide-react';
-import { generateSimulatedTradingSignal } from '@/ai/flows/generate-simulated-trading-signal';
 import { SignalResult } from '@/components/app/signal-result';
 import { cn } from '@/lib/utils';
 
@@ -30,7 +29,8 @@ export type SignalData = {
   expirationTime: '1m' | '5m';
   signal: 'CALL 🔼' | 'PUT 🔽';
   targetTime: string;
-}
+  countdown: number | null;
+};
 
 type AppState = 'idle' | 'loading' | 'result';
 
@@ -45,22 +45,61 @@ export default function AnalisadorPage() {
   });
   const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+    if (appState === 'result' && signalData && signalData.countdown !== null && signalData.countdown > 0) {
+      timer = setInterval(() => {
+        setSignalData(prevData => {
+          if (prevData && prevData.countdown !== null && prevData.countdown > 1) {
+            return { ...prevData, countdown: prevData.countdown - 1 };
+          }
+          if (prevData && prevData.countdown !== null && prevData.countdown <= 1) {
+            clearInterval(timer);
+            return { ...prevData, countdown: 0 };
+          }
+          return prevData;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [appState, signalData]);
+
 
   const handleAnalyze = async () => {
     setAppState('loading');
 
-    try {
-      const expirationMap = { '1m': '1 minute', '5m': '5 minutes' };
-      const result = await generateSimulatedTradingSignal({
-        expirationTime: expirationMap[formData.expirationTime] as '1 minute' | '5 minutes',
+    setTimeout(() => {
+      const now = new Date();
+      let targetDate = new Date(now.getTime());
+
+      if (formData.expirationTime === '1m') {
+        targetDate.setMinutes(now.getMinutes() + 1, 0, 0);
+      } else { // 5m
+        const minutes = now.getMinutes();
+        const remainder = minutes % 5;
+        const minutesToAdd = 5 - remainder;
+        targetDate.setMinutes(minutes + minutesToAdd, 0, 0);
+      }
+
+      const targetTimeString = targetDate.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
       });
-      setSignalData({ ...formData, ...result });
+
+      const randomSignal = Math.random() < 0.5 ? 'CALL 🔼' : 'PUT 🔽';
+      
+      const countdown = Math.max(0, Math.floor((targetDate.getTime() - Date.now()) / 1000));
+      
+      setSignalData({
+        ...formData,
+        signal: randomSignal,
+        targetTime: targetTimeString,
+        countdown: countdown,
+      });
+
       setAppState('result');
-    } catch (error) {
-      console.error(error);
-      setIsAlertOpen(true);
-      setAppState('idle');
-    }
+    }, 3000);
   };
 
   const handleReset = () => {
@@ -77,7 +116,7 @@ export default function AnalisadorPage() {
         </header>
 
         <main className="flex-grow flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg">
+          <div className="w-full max-w-md bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg p-8">
              {appState !== 'result' ? (
               <SignalForm
                 formData={formData}

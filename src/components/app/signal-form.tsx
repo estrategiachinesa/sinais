@@ -22,7 +22,7 @@ type SignalFormProps = {
 
 export function SignalForm({ formData, setFormData, onSubmit, isLoading }: SignalFormProps) {
   return (
-    <div className="w-full space-y-8 text-center p-8">
+    <div className="w-full space-y-8 text-center">
       <div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-headline">
           SINAIS DA<br />ESTRATÉGIA CHINESA

@@ -1,8 +1,8 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Clock, Timer, CandlestickChart } from 'lucide-react';
+import { ExternalLink, RefreshCw } from 'lucide-react';
 import type { SignalData } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
 
@@ -22,45 +22,49 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
         className={
           isCall
             ? 'border-success/50 bg-success/10'
-            : 'border-primary/50 bg-primary/10'
+            : 'border-destructive/50 bg-destructive/10'
         }
       >
         <CardHeader>
-          <CardTitle className="text-2xl">Sinal Gerado!</CardTitle>
+          <CardTitle className="text-2xl">🔔 Sinal Gerado!</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4 text-lg">
-          <div className="flex justify-between items-center p-3 rounded-lg bg-card/50">
-            <span className="flex items-center gap-2 text-muted-foreground"><Clock className="h-5 w-5"/> Hora</span>
-            <span className="font-bold">{data.targetTime}</span>
-          </div>
-          <div className="flex justify-between items-center p-3 rounded-lg bg-card/50">
-            <span className="flex items-center gap-2 text-muted-foreground"><Timer className="h-5 w-5"/> Tempo</span>
-            <span className="font-bold">{data.expirationTime === '1m' ? '1 minuto' : '5 minutos'}</span>
-          </div>
-          <div className="flex justify-between items-center p-3 rounded-lg bg-card/50">
-            <span className="flex items-center gap-2 text-muted-foreground"><CandlestickChart className="h-5 w-5"/> Ativo</span>
+        <CardContent className="space-y-3 text-lg">
+          <div className="flex justify-between items-center text-left">
+            <span className="text-muted-foreground">Ativo:</span>
             <span className="font-bold flex items-center gap-2">
                 <CurrencyFlags asset={data.asset} />
                 {data.asset}
             </span>
           </div>
+          <div className="flex justify-between items-center text-left">
+            <span className="text-muted-foreground">Tempo:</span>
+            <span className="font-bold">{data.expirationTime}</span>
+          </div>
           <div
-            className={`flex justify-between items-center p-4 rounded-lg text-2xl font-bold ${
-              isCall ? 'bg-success text-success-foreground' : 'bg-primary text-primary-foreground'
+            className={`flex justify-between items-center text-2xl font-bold p-3 rounded-lg ${
+              isCall ? 'bg-success text-success-foreground' : 'bg-destructive text-destructive-foreground'
             }`}
           >
-            <span className="flex items-center gap-2">Sinal</span>
-            <span className="flex items-center gap-2">
+            <span>Ação:</span>
+            <span>
               {data.signal}
             </span>
+          </div>
+          <div className="flex justify-between items-center text-left">
+            <span className="text-muted-foreground">Hora da entrada:</span>
+            <span className="font-bold">{data.targetTime}</span>
+          </div>
+          <div className="text-center font-bold text-xl pt-2">
+            {data.countdown !== null && data.countdown > 0 ? (
+                <p>Iniciando em: {data.countdown}s</p>
+            ) : (
+                <p>⏱️ Operação iniciada!</p>
+            )}
           </div>
         </CardContent>
       </Card>
 
       <div className="space-y-4">
-        <p className="text-xl font-semibold text-foreground">
-          ✅ Execute esse sinal agora na corretora oficial!
-        </p>
         <Button
           asChild
           size="lg"
@@ -72,7 +76,8 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
           </a>
         </Button>
         <Button variant="outline" onClick={onReset} className="w-full">
-          Gerar Novo Sinal
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Analisar Novamente
         </Button>
       </div>
     </div>
