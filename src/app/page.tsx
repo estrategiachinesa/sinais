@@ -54,8 +54,23 @@ export default function GatePage() {
                 Você será redirecionado em alguns segundos...
             </p>
            )}
+
+          <div className="space-y-4 pt-6">
+            <h2 className="text-lg font-semibold text-foreground">
+              Instruções
+            </h2>
+            <div className="aspect-video w-full">
+              <iframe
+                className="w-full h-full rounded-lg"
+                src="https://www.youtube.com/embed/1iAgu5fAod0"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
         </main>
-        <footer className="absolute bottom-4 text-center text-[0.7rem] text-foreground/50 w-full px-4">
+        <footer className="absolute bottom-4 text-center text-[0.6rem] text-foreground/30 w-full px-4">
           <p>© 2025 Estratégia Chinesa. </p>
           <p>Todos os direitos reservados.</p>
           <p className="max-w-xl mx-auto">Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.</p>
