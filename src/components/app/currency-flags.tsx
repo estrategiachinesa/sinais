@@ -2,43 +2,77 @@
 const EuroFlag = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
         <circle cx="16" cy="16" r="16" fill="#003399"/>
-        <g transform="translate(16,16)">
+        <g transform="translate(16,16) scale(0.8)">
             <g fill="#FFCC00">
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(18)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(54)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(90)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(126)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(162)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(198)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(234)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(270)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-L2.72 2.36 9.24-1.18z" transform="rotate(306)"/>
-            <path d="M0-12l3.52 10.82L-9.24 2.36h22.48L-12.72 2.36 9.24-1.18z" transform="rotate(342)"/>
+                <path id="star" d="M0-12l3.52 10.82L-9.24 2.36h18.48L3.52 10.82z"/>
+                <use href="#star" transform="rotate(36)"/>
+                <use href="#star" transform="rotate(72)"/>
+                <use href="#star" transform="rotate(108)"/>
+                <use href="#star" transform="rotate(144)"/>
+                <use href="#star" transform="rotate(180)"/>
+                <use href="#star" transform="rotate(216)"/>
+                <use href="#star" transform="rotate(252)"/>
+                <use href="#star" transform="rotate(288)"/>
+                <use href="#star" transform="rotate(324)"/>
+                 <use href="#star" transform="rotate(360)"/>
             </g>
         </g>
     </svg>
 );
 
+
 const JapanFlag = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-        <circle cx="16" cy="16" r="16" fill="#fff"/>
-        <circle cx="16" cy="16" r="9.6" fill="#bc002d"/>
+        <rect x="0" y="0" width="32" height="32" fill="#fff" rx="16"/>
+        <circle cx="16" cy="16" r="6.4" fill="#bc002d"/>
     </svg>
 );
 
+
 const USFlag = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-        <circle cx="16" cy="16" r="16" fill="#b22234"/>
-        <path fill="#fff" d="M0 16A16 16 0 0 1 16 0v32A16 16 0 0 1 0 16z"/>
-        <circle cx="8" cy="16" r="8" fill="#3c3b6e"/>
-        <g fill="#fff" transform="translate(8,16) scale(0.8)">
-            <g>
-                <path d="M-1.5-3l.5 1.5h-2l1.5-1z" transform="translate(0, 2.5) scale(0.5)"/>
-                <path d="M-1.5-3l.5 1.5h-2l1.5-1z" transform="translate(2.5, 1.5) scale(0.5)"/>
-                <path d="M-1.5-3l.5 1.5h-2l1.5-1z" transform="translate(2.5, -1.5) scale(0.5)"/>
-                <path d="M-1.5-3l.5 1.5h-2l1.5-1z" transform="translate(0, -2.5) scale(0.5)"/>
-                <path d="M-1.5-3l.5 1.5h-2l1.5-1z" transform="translate(-2.5, -1.5) scale(0.5)"/>
-                <path d="M-1.5-3l.5 1.5h-2l1.5-1z" transform="translate(-2.5, 1.5) scale(0.5)"/>
+    <svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <clipPath id="clip_usa">
+                <circle cx="16" cy="16" r="16" />
+            </clipPath>
+        </defs>
+        <g clipPath="url(#clip_usa)">
+            <rect width="32" height="32" fill="#B22234" />
+            <path d="M0,4H32 M0,8H32 M0,12H32 M0,20H32 M0,24H32 M0,28H32" stroke="#FFFFFF" strokeWidth="2.6" />
+            <rect width="16" height="18" fill="#3C3B6E" />
+            <g fill="#FFFFFF">
+                <g transform="translate(2, 2.5)">
+                    <g className="stars">
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(4,0) scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(8,0) scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(12,0) scale(1.6)"/>
+                    </g>
+                    <g className="stars" transform="translate(-2, 3)">
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(4,0) scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(8,0) scale(1.6)"/>
+                         <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(12,0) scale(1.6)"/>
+                    </g>
+                    <g className="stars" transform="translate(0, 6)">
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(4,0) scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(8,0) scale(1.6)"/>
+                         <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(12,0) scale(1.6)"/>
+                    </g>
+                     <g className="stars" transform="translate(-2, 9)">
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(4,0) scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(8,0) scale(1.6)"/>
+                         <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(12,0) scale(1.6)"/>
+                    </g>
+                     <g className="stars" transform="translate(0, 12)">
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(4,0) scale(1.6)"/>
+                        <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(8,0) scale(1.6)"/>
+                         <path d="M0,-1.6 l.47,.36 -.18,-.58 .47,.36 -.18,-.58" transform="translate(12,0) scale(1.6)"/>
+                    </g>
+                </g>
             </g>
         </g>
     </svg>
