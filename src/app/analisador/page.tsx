@@ -14,10 +14,11 @@ import {
 import { AnimatedBackground } from '@/components/app/animated-background';
 import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { ExternalLink, Download } from 'lucide-react';
 import { generateSimulatedTradingSignal } from '@/ai/flows/generate-simulated-trading-signal';
 import { SignalResult } from '@/components/app/signal-result';
+import { cn } from '@/lib/utils';
 
 export type FormData = {
   asset: 'EUR/USD' | 'EUR/JPY';
@@ -101,18 +102,14 @@ export default function AnalisadorPage() {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-               <AlertDialogAction asChild>
-                 <a href={affiliateLink} target="_blank" rel="noopener noreferrer" className="bg-blue-600 hover:bg-blue-700">
+                <a href={affiliateLink} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-blue-600 hover:bg-blue-700")}>
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Cadastrar agora
                 </a>
-               </AlertDialogAction>
-               <AlertDialogAction asChild>
-                 <a href="https://traderchines.github.io/vip/" className="bg-green-600 hover:bg-green-700">
+                 <a href="https://traderchines.github.io/vip/" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-green-600 hover:bg-green-700")}>
                     <Download className="mr-2 h-4 w-4" />
                     Baixar o indicador
                 </a>
-               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
