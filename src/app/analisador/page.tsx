@@ -151,7 +151,7 @@ export default function AnalisadorPage() {
           {appState === 'result' && (
              <div className="text-center">
                 <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-headline">
-                    ESTRATÉGIA CHINESA<br />VIP
+                    ESTRATÉGIA<br />CHINESA
                 </h1>
              </div>
           )}
@@ -193,7 +193,7 @@ export default function AnalisadorPage() {
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Cadastrar agora
                 </a>
-                 <a href="https://traderchines.github.io/vip/" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-green-600 hover:bg-green-700")}>
+                 <a href="https://traderchines.github.io/vip/" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-accent hover:bg-accent/90")}>
                     <Download className="mr-2 h-4 w-4" />
                     Baixar o indicador
                 </a>
