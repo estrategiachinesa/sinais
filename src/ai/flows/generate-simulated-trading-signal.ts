@@ -9,8 +9,10 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { Asset } from '@/app/analisador/page';
 
 const SimulatedTradingSignalInputSchema = z.object({
+  asset: z.string().describe('The selected asset, e.g., EUR/USD or EUR/USD (OTC).'),
   expirationTime: z.enum(['1 minute', '5 minutes']).describe('The selected expiration time.'),
   targetTime: z.string().describe('The target time for the signal.'),
 });
@@ -54,7 +56,9 @@ const generateSimulatedTradingSignalPrompt = ai.definePrompt({
   name: 'generateSimulatedTradingSignalPrompt',
   input: {schema: SimulatedTradingSignalInputSchema},
   output: {schema: SimulatedTradingSignalOutputSchema},
-  prompt: `Based on the selected expiration time of {{{expirationTime}}}, generate a simulated trading signal for the next target time of {{{targetTime}}}.
+  prompt: `You are a simulated trading analyst. Based on the selected asset {{{asset}}} and an expiration time of {{{expirationTime}}}, generate a simulated trading signal for the next target time of {{{targetTime}}}.
+
+If the asset is an (OTC) asset, acknowledge that in your simulated analysis.
 
 The signal should randomly be either "CALL 🔼" or "PUT 🔽".  Return the generated signal, the target time, and the source as 'IA'.`,
 });

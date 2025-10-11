@@ -23,12 +23,12 @@ import { useToast } from '@/hooks/use-toast';
 
 
 export type Asset = 
-  | 'EUR/USD' | 'EUR/USD (OTC)'
-  | 'EUR/JPY' | 'EUR/JPY (OTC)'
-  | 'EUR/GBP' | 'EUR/GBP (OTC)'
-  | 'AUD/USD' | 'AUD/USD (OTC)'
-  | 'AUD/JPY' | 'AUD/JPY (OTC)'
   | 'AUD/CAD' | 'AUD/CAD (OTC)'
+  | 'AUD/JPY' | 'AUD/JPY (OTC)'
+  | 'AUD/USD' | 'AUD/USD (OTC)'
+  | 'EUR/GBP' | 'EUR/GBP (OTC)'
+  | 'EUR/JPY' | 'EUR/JPY (OTC)'
+  | 'EUR/USD' | 'EUR/USD (OTC)'
   | 'USD/JPY' | 'USD/JPY (OTC)';
 
 export type FormData = {
@@ -114,7 +114,10 @@ export default function AnalisadorPage() {
     let result: Omit<SimulatedTradingSignalOutput, 'source'> & { source: 'IA' | 'Aleatório' };
 
     try {
-        result = await generateSimulatedTradingSignal({ expirationTime: expirationTimeLabel });
+        result = await generateSimulatedTradingSignal({ 
+          asset: formData.asset,
+          expirationTime: expirationTimeLabel 
+        });
     } catch (error) {
         console.error("AI signal generation failed, using fallback.", error);
 
