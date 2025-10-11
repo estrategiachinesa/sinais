@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Analisador de Sinais - Estratégia Chinesa',
+  title: 'Estratégia Chinesa',
   description: 'Receba sinais de trading simulados em tempo real.',
 };
 
