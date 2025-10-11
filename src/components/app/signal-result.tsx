@@ -13,7 +13,6 @@ type SignalResultProps = {
 
 export function SignalResult({ data, onReset }: SignalResultProps) {
   const isCall = data.signal.includes('CALL');
-  const indicatorLink = 'https://traderchines.github.io/vip/';
   
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -83,16 +82,6 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
       </Card>
 
       <div className="space-y-4">
-        <Button
-          asChild
-          size="lg"
-          className="w-full h-14 text-lg font-bold bg-accent hover:bg-accent/90 text-accent-foreground"
-        >
-          <a href={indicatorLink} target="_blank" rel="noopener noreferrer">
-            Baixar o indicador
-            <Download className="ml-2 h-5 w-5" />
-          </a>
-        </Button>
         <Button 
           variant="outline" 
           onClick={onReset} 
