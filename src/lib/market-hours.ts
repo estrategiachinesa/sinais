@@ -1,3 +1,4 @@
+
 import type { Asset } from '@/app/analisador/page';
 
 // All times are in America/Sao_Paulo (UTC-3)
@@ -17,13 +18,13 @@ const marketSchedules: Record<Asset, Schedule> = {
     6: [], // Saturday (closed)
   },
   'EUR/USD (OTC)': {
-    0: [{ start: 21, end: 24 }], // Sunday
-    1: [{ start: 0, end: 17 }, { start: 21, end: 24 }], // Monday
-    2: [{ start: 0, end: 17 }, { start: 21, end: 24 }], // Tuesday
-    3: [{ start: 0, end: 17 }, { start: 21, end: 24 }], // Wednesday
-    4: [{ start: 0, end: 17 }, { start: 21, end: 24 }], // Thursday
-    5: [{ start: 0, end: 15.5 }], // Friday
-    6: [], // Saturday (closed)
+    0: [{ start: 0, end: 24 }], // Sunday
+    1: [{ start: 0, end: 1 }, { start: 2, end: 24 }], // Monday
+    2: [{ start: 0, end: 24 }], // Tuesday
+    3: [{ start: 0, end: 1 }, { start: 2, end: 24 }], // Wednesday
+    4: [{ start: 0, end: 24 }], // Thursday
+    5: [{ start: 0, end: 1 }, { start: 2, end: 24 }], // Friday
+    6: [{ start: 0, end: 24 }], // Saturday
   },
   'EUR/JPY': {
     0: [{ start: 21, end: 24 }], // Sunday
