@@ -71,6 +71,20 @@ export default function AnalisadorPage() {
     return () => clearInterval(interval);
   }, [formData.asset]);
 
+  useEffect(() => {
+    const checkAndSetOTC = () => {
+      const isEurUsdOpen = isMarketOpenForAsset('EUR/USD');
+      const isEurJpyOpen = isMarketOpenForAsset('EUR/JPY');
+      if (!isEurUsdOpen && !isEurJpyOpen) {
+        setShowOTC(true);
+      }
+    };
+    
+    checkAndSetOTC(); // Check on mount
+    const interval = setInterval(checkAndSetOTC, 60000); // Re-check every minute
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
