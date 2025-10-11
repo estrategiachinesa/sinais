@@ -50,14 +50,12 @@ type AppState = 'idle' | 'loading' | 'result';
 
 export default function AnalisadorPage() {
   const [appState, setAppState] = useState<AppState>('idle');
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [signalData, setSignalData] = useState<SignalData | null>(null);
 
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/USD',
     expirationTime: '1m',
   });
-  const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
   const telegramLink = 'https://t.me/TraderChinesVIP';
 
   useEffect(() => {
@@ -107,36 +105,31 @@ export default function AnalisadorPage() {
 
   const handleAnalyze = async () => {
     setAppState('loading');
-    try {
-      const expirationTimeLabel = formData.expirationTime === '1m' ? '1 minute' : '5 minutes';
-      const result = await generateSimulatedTradingSignal({ expirationTime: expirationTimeLabel });
+    
+    const expirationTimeLabel = formData.expirationTime === '1m' ? '1 minute' : '5 minutes';
+    const result = await generateSimulatedTradingSignal({ expirationTime: expirationTimeLabel });
 
-      const [hours, minutes] = result.targetTime.split(':');
-      let targetDate = new Date();
-      targetDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+    const [hours, minutes] = result.targetTime.split(':');
+    let targetDate = new Date();
+    targetDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
 
-      // Handle case where target time is in the past (e.g., just after midnight)
-      if (targetDate.getTime() < Date.now()) {
-          targetDate.setDate(targetDate.getDate() + 1);
-      }
-      
-      const countdown = Math.max(0, Math.floor((targetDate.getTime() - Date.now()) / 1000));
-      
-      setSignalData({
-        ...formData,
-        signal: result.signal,
-        targetTime: result.targetTime,
-        countdown: countdown,
-        operationCountdown: null,
-        operationStatus: 'pending'
-      });
-
-      setAppState('result');
-    } catch(error) {
-        console.error("Failed to generate signal:", error);
-        setIsAlertOpen(true);
-        setAppState('idle');
+    // Handle case where target time is in the past (e.g., just after midnight)
+    if (targetDate.getTime() < Date.now()) {
+        targetDate.setDate(targetDate.getDate() + 1);
     }
+    
+    const countdown = Math.max(0, Math.floor((targetDate.getTime() - Date.now()) / 1000));
+    
+    setSignalData({
+      ...formData,
+      signal: result.signal,
+      targetTime: result.targetTime,
+      countdown: countdown,
+      operationCountdown: null,
+      operationStatus: 'pending'
+    });
+
+    setAppState('result');
   };
 
   const handleReset = () => {
@@ -186,25 +179,6 @@ export default function AnalisadorPage() {
           </a>
         </main>
         
-        <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Falha ao analisar ❌</AlertDialogTitle>
-              <AlertDialogDescription>
-                Não encontramos seu cadastro no sistema.
-                <br/>
-                É preciso se cadastrar e realizar um depósito de qualquer valor para gerar os sinais.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <a href={affiliateLink} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-blue-600 hover:bg-blue-700")}>
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Cadastrar agora
-                </a>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
         <footer className="p-4 text-center text-[0.6rem] text-foreground/30">
           <p>© 2025 Estratégia Chinesa. </p>
           <p>Todos os direitos reservados.</p>
