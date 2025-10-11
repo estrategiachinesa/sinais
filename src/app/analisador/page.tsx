@@ -43,6 +43,7 @@ export type SignalData = {
   expirationTime: '1m' | '5m';
   signal: 'CALL 🔼' | 'PUT 🔽';
   targetTime: string;
+  source: 'IA' | 'Aleatório';
   countdown: number | null;
   operationCountdown: number | null;
   operationStatus: OperationStatus;
@@ -110,7 +111,7 @@ export default function AnalisadorPage() {
     setAppState('loading');
     const expirationTimeLabel = formData.expirationTime === '1m' ? '1 minute' : '5 minutes';
     
-    let result: SimulatedTradingSignalOutput;
+    let result: Omit<SimulatedTradingSignalOutput, 'source'> & { source: 'IA' | 'Aleatório' };
 
     try {
         result = await generateSimulatedTradingSignal({ expirationTime: expirationTimeLabel });
@@ -140,7 +141,8 @@ export default function AnalisadorPage() {
 
         result = {
             signal: Math.random() < 0.5 ? 'CALL 🔼' : 'PUT 🔽',
-            targetTime: targetTimeString
+            targetTime: targetTimeString,
+            source: 'Aleatório'
         };
     }
     
@@ -159,6 +161,7 @@ export default function AnalisadorPage() {
       ...formData,
       signal: result.signal,
       targetTime: result.targetTime,
+      source: result.source,
       countdown: countdown,
       operationCountdown: null,
       operationStatus: 'pending'
@@ -200,7 +203,7 @@ export default function AnalisadorPage() {
               signalData && <SignalResult data={signalData} onReset={handleReset} />
              )}
           </div>
-          <a
+           <a
             href={telegramLink}
             target="_blank"
             rel="noopener noreferrer"

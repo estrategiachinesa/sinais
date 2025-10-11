@@ -19,6 +19,7 @@ export type SimulatedTradingSignalInput = z.infer<typeof SimulatedTradingSignalI
 const SimulatedTradingSignalOutputSchema = z.object({
   signal: z.enum(['CALL 🔼', 'PUT 🔽']).describe('The simulated trading signal.'),
   targetTime: z.string().describe('The target time for the generated signal.'),
+  source: z.literal('IA').describe('The source of the signal generation.'),
 });
 export type SimulatedTradingSignalOutput = z.infer<typeof SimulatedTradingSignalOutputSchema>;
 
@@ -55,7 +56,7 @@ const generateSimulatedTradingSignalPrompt = ai.definePrompt({
   output: {schema: SimulatedTradingSignalOutputSchema},
   prompt: `Based on the selected expiration time of {{{expirationTime}}}, generate a simulated trading signal for the next target time of {{{targetTime}}}.
 
-The signal should randomly be either "CALL 🔼" or "PUT 🔽".  Return the generated signal and the target time.`,
+The signal should randomly be either "CALL 🔼" or "PUT 🔽".  Return the generated signal, the target time, and the source as 'IA'.`,
 });
 
 const generateSimulatedTradingSignalFlow = ai.defineFlow(
@@ -70,6 +71,7 @@ const generateSimulatedTradingSignalFlow = ai.defineFlow(
     return {
       signal: output!.signal,
       targetTime: input.targetTime,
+      source: 'IA',
     };
   }
 );

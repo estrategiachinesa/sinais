@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Download, RefreshCw } from 'lucide-react';
 import type { SignalData } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
+import { Badge } from '@/components/ui/badge';
 
 type SignalResultProps = {
   data: SignalData;
@@ -47,7 +48,12 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
         }
       >
         <CardHeader>
-          <CardTitle className="text-2xl">🔔 Sinal Gerado!</CardTitle>
+          <CardTitle className="text-2xl flex items-center justify-between">
+            <span>🔔 Sinal Gerado!</span>
+            <Badge variant={data.source === 'IA' ? 'default' : 'secondary'} className="text-xs">
+              {data.source}
+            </Badge>
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-lg">
           <div className="flex justify-between items-center text-left">
