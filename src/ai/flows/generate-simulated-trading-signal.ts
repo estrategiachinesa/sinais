@@ -32,8 +32,10 @@ export async function generateSimulatedTradingSignal(
   let targetTime: Date;
 
   if (input.expirationTime === '1 minute') {
-    targetTime = new Date(now.getTime());
-    targetTime.setMinutes(now.getMinutes() + 1, 0, 0);
+    const nextMinute = new Date(now);
+    nextMinute.setSeconds(0, 0);
+    nextMinute.setMinutes(nextMinute.getMinutes() + 1);
+    targetTime = nextMinute;
   } else {
     // 5 minutes
     const minutes = now.getMinutes();
@@ -41,6 +43,10 @@ export async function generateSimulatedTradingSignal(
     const minutesToAdd = 5 - remainder;
     targetTime = new Date(now.getTime());
     targetTime.setMinutes(minutes + minutesToAdd, 0, 0);
+     // If target time is in the past, move to the next 5-minute interval
+    if (targetTime.getTime() < now.getTime()) {
+      targetTime.setMinutes(targetTime.getMinutes() + 5);
+    }
   }
 
   const targetTimeString = targetTime.toLocaleTimeString('en-US', {
@@ -56,11 +62,27 @@ const generateSimulatedTradingSignalPrompt = ai.definePrompt({
   name: 'generateSimulatedTradingSignalPrompt',
   input: {schema: SimulatedTradingSignalInputSchema},
   output: {schema: SimulatedTradingSignalOutputSchema},
-  prompt: `You are a simulated trading analyst. Based on the selected asset {{{asset}}} and an expiration time of {{{expirationTime}}}, generate a simulated trading signal for the next target time of {{{targetTime}}}.
+  prompt: `You are an expert trading analyst AI. Your task is to generate a simulated trading signal for a binary options platform.
 
-If the asset is an (OTC) asset, acknowledge that in your simulated analysis.
+**Asset:** {{{asset}}}
+**Expiration Time:** {{{expirationTime}}}
+**Target Entry Time:** {{{targetTime}}}
 
-The signal should randomly be either "CALL 🔼" or "PUT 🔽".  Return the generated signal, the target time, and the source as 'IA'.`,
+**Your Goal:**
+Generate a random trading signal, either "CALL 🔼" or "PUT 🔽".
+Although the signal is random, your reasoning must be based on a plausible, simulated technical analysis.
+
+**Simulated Analysis Context:**
+- Pretend you are analyzing the asset's chart in real-time.
+- If the asset is an (OTC) asset, your simulated analysis should reflect the higher volatility and off-market nature of OTC assets.
+- Your decision should be based on a random combination of common technical indicators like RSI, Moving Averages (EMA/SMA), Bollinger Bands, or MACD.
+
+**Example of Simulated Reasoning (for internal thought process only, do not include in output):**
+- "The RSI for EUR/USD is approaching the oversold territory (below 30), suggesting a potential price bounce. I'll issue a CALL signal."
+- "AUD/JPY (OTC) is showing high volatility and has just broken below a key support level, confirmed by the MACD crossover. I will issue a PUT signal."
+
+Based on your simulated analysis, randomly choose "CALL 🔼" or "PUT 🔽".
+Return only the final signal, the target time, and the source as 'IA' in the specified JSON format.`,
 });
 
 const generateSimulatedTradingSignalFlow = ai.defineFlow(
