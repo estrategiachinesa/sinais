@@ -18,7 +18,9 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { ExternalLink, Download, Send } from 'lucide-react';
 import { SignalResult } from '@/components/app/signal-result';
 import { cn } from '@/lib/utils';
-import { generateSimulatedTradingSignal } from '@/ai/flows/generate-simulated-trading-signal';
+import { generateSimulatedTradingSignal, type SimulatedTradingSignalOutput } from '@/ai/flows/generate-simulated-trading-signal';
+import { useToast } from '@/hooks/use-toast';
+
 
 export type Asset = 
   | 'EUR/USD' | 'EUR/USD (OTC)'
@@ -51,6 +53,7 @@ type AppState = 'idle' | 'loading' | 'result';
 export default function AnalisadorPage() {
   const [appState, setAppState] = useState<AppState>('idle');
   const [signalData, setSignalData] = useState<SignalData | null>(null);
+  const { toast } = useToast();
 
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/USD',
@@ -103,12 +106,44 @@ export default function AnalisadorPage() {
   }, [appState, signalData]);
 
 
-  const handleAnalyze = async () => {
+ const handleAnalyze = async () => {
     setAppState('loading');
-    
     const expirationTimeLabel = formData.expirationTime === '1m' ? '1 minute' : '5 minutes';
-    const result = await generateSimulatedTradingSignal({ expirationTime: expirationTimeLabel });
+    
+    let result: SimulatedTradingSignalOutput;
 
+    try {
+        result = await generateSimulatedTradingSignal({ expirationTime: expirationTimeLabel });
+    } catch (error) {
+        console.error("AI signal generation failed, using fallback.", error);
+
+        // Fallback to random signal generation
+        const now = new Date();
+        let targetTime: Date;
+
+        if (expirationTimeLabel === '1 minute') {
+            targetTime = new Date(now.getTime());
+            targetTime.setMinutes(now.getMinutes() + 1, 0, 0);
+        } else { // 5 minutes
+            const minutes = now.getMinutes();
+            const remainder = minutes % 5;
+            const minutesToAdd = 5 - remainder;
+            targetTime = new Date(now.getTime());
+            targetTime.setMinutes(minutes + minutesToAdd, 0, 0);
+        }
+
+        const targetTimeString = targetTime.toLocaleTimeString('en-US', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+
+        result = {
+            signal: Math.random() < 0.5 ? 'CALL 🔼' : 'PUT 🔽',
+            targetTime: targetTimeString
+        };
+    }
+    
     const [hours, minutes] = result.targetTime.split(':');
     let targetDate = new Date();
     targetDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
