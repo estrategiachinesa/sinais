@@ -18,6 +18,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { ExternalLink, Download, Send } from 'lucide-react';
 import { SignalResult } from '@/components/app/signal-result';
 import { cn } from '@/lib/utils';
+import { generateSimulatedTradingSignal } from '@/ai/flows/generate-simulated-trading-signal';
 
 export type Asset = 
   | 'EUR/USD' | 'EUR/USD (OTC)'
@@ -106,41 +107,36 @@ export default function AnalisadorPage() {
 
   const handleAnalyze = async () => {
     setAppState('loading');
+    try {
+      const expirationTimeLabel = formData.expirationTime === '1m' ? '1 minute' : '5 minutes';
+      const result = await generateSimulatedTradingSignal({ expirationTime: expirationTimeLabel });
 
-    setTimeout(() => {
-      const now = new Date();
-      let targetDate = new Date(now.getTime());
+      const [hours, minutes] = result.targetTime.split(':');
+      let targetDate = new Date();
+      targetDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
 
-      if (formData.expirationTime === '1m') {
-        targetDate.setMinutes(now.getMinutes() + 1, 0, 0);
-      } else { // 5m
-        const minutes = now.getMinutes();
-        const remainder = minutes % 5;
-        const minutesToAdd = 5 - remainder;
-        targetDate.setMinutes(minutes + minutesToAdd, 0, 0);
+      // Handle case where target time is in the past (e.g., just after midnight)
+      if (targetDate.getTime() < Date.now()) {
+          targetDate.setDate(targetDate.getDate() + 1);
       }
-
-      const targetTimeString = targetDate.toLocaleTimeString('en-US', {
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-
-      const randomSignal = Math.random() < 0.5 ? 'CALL 🔼' : 'PUT 🔽';
       
       const countdown = Math.max(0, Math.floor((targetDate.getTime() - Date.now()) / 1000));
       
       setSignalData({
         ...formData,
-        signal: randomSignal,
-        targetTime: targetTimeString,
+        signal: result.signal,
+        targetTime: result.targetTime,
         countdown: countdown,
         operationCountdown: null,
         operationStatus: 'pending'
       });
 
       setAppState('result');
-    }, 3000);
+    } catch(error) {
+        console.error("Failed to generate signal:", error);
+        setIsAlertOpen(true);
+        setAppState('idle');
+    }
   };
 
   const handleReset = () => {
