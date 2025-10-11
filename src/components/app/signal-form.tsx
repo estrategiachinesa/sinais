@@ -60,20 +60,21 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading, showOTC
       </div>
 
       <div className="space-y-4 text-left">
-        <div className="flex justify-between items-center">
-           <Label htmlFor="otc-switch" className="flex flex-col">
-            <span>Incluir ativos (OTC)</span>
-            <span className="text-xs text-muted-foreground">Mercado de balcão</span>
-          </Label>
-          <Switch
-            id="otc-switch"
-            checked={showOTC}
-            onCheckedChange={setShowOTC}
-            disabled={isLoading}
-          />
-        </div>
         <div className="space-y-2">
-          <Label htmlFor="asset-select">Ativo:</Label>
+          <div className="flex justify-between items-center">
+            <Label htmlFor="asset-select">Ativo:</Label>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="otc-switch" className="text-xs text-muted-foreground">
+                exibir (OTC)
+              </Label>
+              <Switch
+                id="otc-switch"
+                checked={showOTC}
+                onCheckedChange={setShowOTC}
+                disabled={isLoading}
+              />
+            </div>
+          </div>
           <Select
             value={formData.asset}
             onValueChange={(value) => setFormData({ ...formData, asset: value as Asset })}

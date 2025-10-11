@@ -55,7 +55,7 @@ export default function AnalisadorPage() {
   const [appState, setAppState] = useState<AppState>('idle');
   const [signalData, setSignalData] = useState<SignalData | null>(null);
   const { toast } = useToast();
-  const [showOTC, setShowOTC] = useState(true);
+  const [showOTC, setShowOTC] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/USD',
