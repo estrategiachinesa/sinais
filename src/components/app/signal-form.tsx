@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { BarChart, Loader2 } from 'lucide-react';
-import type { FormData } from '@/app/analisador/page';
+import type { FormData, Asset } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
 import { Label } from '@/components/ui/label';
 
@@ -19,6 +19,16 @@ type SignalFormProps = {
   onSubmit: () => void;
   isLoading: boolean;
 };
+
+const assets: Asset[] = [
+  'EUR/USD', 'EUR/USD (OTC)',
+  'EUR/JPY', 'EUR/JPY (OTC)',
+  'EUR/GBP', 'EUR/GBP (OTC)',
+  'AUD/USD', 'AUD/USD (OTC)',
+  'AUD/JPY', 'AUD/JPY (OTC)',
+  'AUD/CAD', 'AUD/CAD (OTC)',
+  'USD/JPY', 'USD/JPY (OTC)',
+];
 
 export function SignalForm({ formData, setFormData, onSubmit, isLoading }: SignalFormProps) {
   return (
@@ -37,7 +47,7 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
           <Label htmlFor="asset-select">Ativo:</Label>
           <Select
             value={formData.asset}
-            onValueChange={(value) => setFormData({ ...formData, asset: value as 'EUR/USD' | 'EUR/JPY' })}
+            onValueChange={(value) => setFormData({ ...formData, asset: value as Asset })}
             disabled={isLoading}
           >
             <SelectTrigger className="h-12 text-base" id="asset-select">
@@ -49,18 +59,14 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
               </SelectValue>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="EUR/USD">
+              {assets.map(asset => (
+                <SelectItem key={asset} value={asset}>
                    <div className="flex items-center gap-2">
-                      <CurrencyFlags asset="EUR/USD" />
-                      <span>EUR/USD</span>
+                      <CurrencyFlags asset={asset} />
+                      <span>{asset}</span>
                   </div>
               </SelectItem>
-              <SelectItem value="EUR/JPY">
-                  <div className="flex items-center gap-2">
-                      <CurrencyFlags asset="EUR/JPY" />
-                      <span>EUR/JPY</span>
-                  </div>
-              </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -85,7 +91,7 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
 
       <Button
         size="lg"
-        className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground"
+        className="w-full h-14 text-lg font-bold bg-blue-600 hover:bg-blue-700 text-primary-foreground"
         onClick={onSubmit}
         disabled={isLoading}
       >

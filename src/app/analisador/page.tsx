@@ -19,15 +19,24 @@ import { ExternalLink, Download, Send } from 'lucide-react';
 import { SignalResult } from '@/components/app/signal-result';
 import { cn } from '@/lib/utils';
 
+export type Asset = 
+  | 'EUR/USD' | 'EUR/USD (OTC)'
+  | 'EUR/JPY' | 'EUR/JPY (OTC)'
+  | 'EUR/GBP' | 'EUR/GBP (OTC)'
+  | 'AUD/USD' | 'AUD/USD (OTC)'
+  | 'AUD/JPY' | 'AUD/JPY (OTC)'
+  | 'AUD/CAD' | 'AUD/CAD (OTC)'
+  | 'USD/JPY' | 'USD/JPY (OTC)';
+
 export type FormData = {
-  asset: 'EUR/USD' | 'EUR/JPY';
+  asset: Asset;
   expirationTime: '1m' | '5m';
 };
 
 export type OperationStatus = 'pending' | 'active' | 'finished';
 
 export type SignalData = {
-  asset: 'EUR/USD' | 'EUR/JPY';
+  asset: Asset;
   expirationTime: '1m' | '5m';
   signal: 'CALL 🔼' | 'PUT 🔽';
   targetTime: string;
@@ -171,7 +180,10 @@ export default function AnalisadorPage() {
             href={telegramLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center text-foreground/80 hover:text-foreground transition-colors"
+            className={cn(
+              buttonVariants({ variant: 'ghost', size: 'sm' }),
+              'flex flex-col h-auto items-center text-foreground/80 hover:text-foreground transition-colors'
+            )}
           >
             <Send className="h-8 w-8" />
             <span className="text-xs mt-1">Canal do Telegram</span>
@@ -192,10 +204,6 @@ export default function AnalisadorPage() {
                 <a href={affiliateLink} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-blue-600 hover:bg-blue-700")}>
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Cadastrar agora
-                </a>
-                 <a href="https://traderchines.github.io/vip/" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), "bg-accent hover:bg-accent/90")}>
-                    <Download className="mr-2 h-4 w-4" />
-                    Baixar o indicador
                 </a>
             </AlertDialogFooter>
           </AlertDialogContent>
