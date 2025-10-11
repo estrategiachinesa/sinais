@@ -15,7 +15,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'AlphaTrade Signals',
+  title: 'Estratégia Chinesa',
   description: 'Receba sinais de trading simulados em tempo real.',
 };
 
