@@ -148,6 +148,13 @@ export default function AnalisadorPage() {
         </header>
 
         <main className="flex-grow flex flex-col items-center justify-center p-4 space-y-6">
+          {appState === 'result' && (
+             <div className="text-center">
+                <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-headline">
+                    ESTRATÉGIA CHINESA<br />VIP
+                </h1>
+             </div>
+          )}
           <div className="w-full max-w-md bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg p-8">
              {appState !== 'result' ? (
               <SignalForm
