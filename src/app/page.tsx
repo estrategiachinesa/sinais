@@ -31,6 +31,9 @@ export default function GatePage() {
       <div className="flex flex-col min-h-screen">
         <main className="flex-grow flex items-center justify-center text-center p-4">
           <div className="w-full max-w-lg space-y-6">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-headline mb-4">
+              ESTRATÉGIA CHINESA
+            </h1>
             <div className="flex justify-center">
               <AlertTriangle className="h-12 w-12 text-blue-500" />
             </div>
@@ -60,7 +63,7 @@ export default function GatePage() {
             )}
 
             <div className="space-y-4 pt-6">
-              <h2 className="text-lg font-semibold text-foreground">
+              <h2 className="text-lg font-semibold text-yellow-500">
                 Instruções
               </h2>
               <div className="aspect-video w-full rounded-lg overflow-hidden">
