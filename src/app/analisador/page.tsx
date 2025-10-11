@@ -78,6 +78,7 @@ export default function AnalisadorPage() {
       const isEurJpyOpen = isMarketOpenForAsset('EUR/JPY');
       if (!isEurUsdOpen && !isEurJpyOpen) {
         setShowOTC(true);
+        setFormData(prev => ({ ...prev, asset: 'EUR/USD (OTC)' }));
       }
     };
     
