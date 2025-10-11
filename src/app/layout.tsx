@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { Inter, Poppins } from 'next/font/google';
+import { TelegramFloatingIcon } from '@/components/app/telegram-floating-icon';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         {children}
         <Toaster />
+        <TelegramFloatingIcon href="https://t.me/TraderChinesVIP" />
       </body>
     </html>
   );

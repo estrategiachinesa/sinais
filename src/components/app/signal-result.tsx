@@ -97,7 +97,7 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
           variant="outline" 
           onClick={onReset} 
           className="w-full"
-          disabled={data.operationStatus === 'pending'}
+          disabled={data.operationStatus === 'pending' || data.operationStatus === 'active'}
         >
             <RefreshCw className="mr-2 h-4 w-4" />
             Analisar Novamente

@@ -63,7 +63,7 @@ export default function GatePage() {
                 Instruções
               </h2>
               <div className="aspect-video w-full rounded-lg overflow-hidden">
-                <CustomVideoPlayer url="https://youtube.com/shorts/TmK2mnpXT7A" />
+                <CustomVideoPlayer url="https://youtube.com/shorts/m3rJjnZeG8o" />
               </div>
             </div>
           </div>
