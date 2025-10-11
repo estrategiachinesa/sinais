@@ -23,13 +23,13 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
 
   const renderStatus = () => {
     if (data.operationStatus === 'pending' && data.countdown !== null && data.countdown > 0) {
-      return <p>Iniciar em: <span className="text-yellow-400">{data.countdown}s</span></p>;
+      return <p>Iniciar em: <span className="text-yellow-400">{formatTime(data.countdown)}</span></p>;
     }
     if (data.operationStatus === 'active' && data.operationCountdown !== null && data.operationCountdown > 0) {
         
         const isPurchaseTimeOver = data.expirationTime === '1m' 
             ? data.operationCountdown <= 29 
-            : data.operationCountdown <= 59; // Rule for 5 min signals
+            : data.operationCountdown <= 59; // Rule for 5 min signals, can be adjusted
 
         const isBlinking = data.operationCountdown <= 3;
 
@@ -45,13 +45,10 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
           </p>
         );
     }
-    if (data.operationStatus === 'active' && (data.operationCountdown === 0 || data.operationCountdown === null)) {
-         return <p>⏱️ Operação iniciada!</p>;
-    }
     if (data.operationStatus === 'finished') {
         return <p>✅ Operação finalizada!</p>
     }
-     return <p>⏱️ Operação iniciada!</p>;
+     return <p>⏱️ Aguardando início...</p>;
   };
 
 

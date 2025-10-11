@@ -40,6 +40,7 @@ export type SignalData = {
   signal: 'CALL 🔼' | 'PUT 🔽';
   targetTime: string;
   source: 'IA' | 'Aleatório';
+  targetDate: Date; // Keep the full date object for precise calculations
   countdown: number | null;
   operationCountdown: number | null;
   operationStatus: OperationStatus;
@@ -90,45 +91,55 @@ export default function AnalisadorPage() {
     let timer: NodeJS.Timeout | undefined;
 
     if (appState === 'result' && signalData) {
-      // First countdown (until operation starts)
-      if (signalData.operationStatus === 'pending' && signalData.countdown !== null && signalData.countdown > 0) {
-        timer = setInterval(() => {
-          setSignalData(prevData => {
-            if (prevData && prevData.countdown !== null && prevData.countdown > 1) {
-              return { ...prevData, countdown: prevData.countdown - 1 };
-            }
-            if (prevData && prevData.countdown !== null && prevData.countdown <= 1) {
-              clearInterval(timer);
+      const updateCountdowns = () => {
+        setSignalData(prevData => {
+          if (!prevData) return null;
+
+          const now = Date.now();
+          
+          if (prevData.operationStatus === 'pending') {
+            const newCountdown = Math.max(0, Math.floor((prevData.targetDate.getTime() - now) / 1000));
+            
+            if (newCountdown > 0) {
+              return { ...prevData, countdown: newCountdown };
+            } else {
+              // Transition to active
               const operationDuration = prevData.expirationTime === '1m' ? 60 : 300;
-              return { 
-                ...prevData, 
-                countdown: 0, 
+              return {
+                ...prevData,
+                countdown: 0,
                 operationStatus: 'active',
+                // Set the initial operation countdown based on the target time + duration
                 operationCountdown: operationDuration
               };
             }
-            return prevData;
-          });
-        }, 1000);
-      }
-      // Second countdown (operation duration)
-      else if (signalData.operationStatus === 'active' && signalData.operationCountdown !== null && signalData.operationCountdown > 0) {
-        timer = setInterval(() => {
-            setSignalData(prevData => {
-                if(prevData && prevData.operationCountdown !== null && prevData.operationCountdown > 1) {
-                    return { ...prevData, operationCountdown: prevData.operationCountdown - 1};
-                }
-                if (prevData && prevData.operationCountdown !== null && prevData.operationCountdown <= 1) {
-                    clearInterval(timer);
-                    return { ...prevData, operationCountdown: 0, operationStatus: 'finished' };
-                }
-                return prevData;
-            })
-        }, 1000);
-      }
+          }
+
+          if (prevData.operationStatus === 'active') {
+              const operationDuration = prevData.expirationTime === '1m' ? 60 : 300;
+              const operationEndTime = prevData.targetDate.getTime() + (operationDuration * 1000);
+              const newOperationCountdown = Math.max(0, Math.floor((operationEndTime - now) / 1000));
+
+              if (newOperationCountdown > 0) {
+                  return { ...prevData, operationCountdown: newOperationCountdown };
+              } else {
+                  // Transition to finished
+                  return { ...prevData, operationCountdown: 0, operationStatus: 'finished' };
+              }
+          }
+
+          return prevData;
+        });
+      };
+      
+      // Call immediately to avoid 1-second initial delay
+      updateCountdowns(); 
+      
+      timer = setInterval(updateCountdowns, 1000);
+
     }
     return () => clearInterval(timer);
-  }, [appState, signalData]);
+  }, [appState, signalData?.operationStatus]); // Re-trigger when status changes
 
 
  const handleAnalyze = async () => {
@@ -189,6 +200,7 @@ export default function AnalisadorPage() {
       signal: result.signal,
       targetTime: result.targetTime,
       source: result.source,
+      targetDate: targetDate, // Store the full date object
       countdown: countdown,
       operationCountdown: null,
       operationStatus: 'pending'
