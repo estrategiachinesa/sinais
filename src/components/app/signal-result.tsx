@@ -64,7 +64,7 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
             </span>
           </div>
           <div className="flex justify-between items-center text-left">
-            <span className="text-muted-foreground">Tempo:</span>
+            <span className="text-muted-foreground">Expiração:</span>
             <span className="font-bold">{data.expirationTime}</span>
           </div>
           <div
