@@ -15,7 +15,7 @@ import { AnimatedBackground } from '@/components/app/animated-background';
 import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { ExternalLink, Download } from 'lucide-react';
+import { ExternalLink, Download, Send } from 'lucide-react';
 import { SignalResult } from '@/components/app/signal-result';
 import { cn } from '@/lib/utils';
 
@@ -48,6 +48,7 @@ export default function AnalisadorPage() {
     expirationTime: '1m',
   });
   const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
+  const telegramLink = 'https://t.me/TraderChinesVIP';
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -146,7 +147,7 @@ export default function AnalisadorPage() {
           <OnlineTraders />
         </header>
 
-        <main className="flex-grow flex items-center justify-center p-4">
+        <main className="flex-grow flex flex-col items-center justify-center p-4 space-y-6">
           <div className="w-full max-w-md bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg p-8">
              {appState !== 'result' ? (
               <SignalForm
@@ -159,6 +160,15 @@ export default function AnalisadorPage() {
               signalData && <SignalResult data={signalData} onReset={handleReset} />
              )}
           </div>
+          <a
+            href={telegramLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center text-foreground/80 hover:text-foreground transition-colors"
+          >
+            <Send className="h-8 w-8" />
+            <span className="text-xs mt-1">Canal do Telegram</span>
+          </a>
         </main>
         
         <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
