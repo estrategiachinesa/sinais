@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Brain, RefreshCw } from 'lucide-react';
 import type { SignalData } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
+import { cn } from '@/lib/utils';
 
 type SignalResultProps = {
   data: SignalData;
@@ -25,7 +26,24 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
       return <p>Iniciar em: <span className="text-yellow-400">{data.countdown}s</span></p>;
     }
     if (data.operationStatus === 'active' && data.operationCountdown !== null && data.operationCountdown > 0) {
-        return <p>Finalizando em: <span className="text-yellow-400">{formatTime(data.operationCountdown)}</span></p>
+        
+        const isPurchaseTimeOver = data.expirationTime === '1m' 
+            ? data.operationCountdown <= 29 
+            : data.operationCountdown <= 59; // Rule for 5 min signals
+
+        const isBlinking = data.operationCountdown <= 3;
+
+        return (
+          <p>
+            Finalizando em:{' '}
+            <span className={cn(
+                isPurchaseTimeOver ? 'text-red-500' : 'text-yellow-400',
+                isBlinking && 'animate-pulse'
+            )}>
+              {formatTime(data.operationCountdown)}
+            </span>
+          </p>
+        );
     }
     if (data.operationStatus === 'active' && (data.operationCountdown === 0 || data.operationCountdown === null)) {
          return <p>⏱️ Operação iniciada!</p>;
