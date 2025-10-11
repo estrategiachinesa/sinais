@@ -169,6 +169,9 @@ export default function AnalisadorPage() {
             const minutesToAdd = 5 - remainder;
             targetTime = new Date(now.getTime());
             targetTime.setMinutes(minutes + minutesToAdd, 0, 0);
+             if (targetTime.getTime() < now.getTime()) {
+                targetTime.setMinutes(targetTime.getMinutes() + 5);
+             }
         }
 
         const targetTimeString = targetTime.toLocaleTimeString('en-US', {
@@ -193,15 +196,13 @@ export default function AnalisadorPage() {
         targetDate.setDate(targetDate.getDate() + 1);
     }
     
-    const countdown = Math.max(0, Math.floor((targetDate.getTime() - Date.now()) / 1000));
-    
     setSignalData({
       ...formData,
       signal: result.signal,
       targetTime: result.targetTime,
       source: result.source,
       targetDate: targetDate, // Store the full date object
-      countdown: countdown,
+      countdown: null, // Let the useEffect handle the initial calculation
       operationCountdown: null,
       operationStatus: 'pending'
     });
