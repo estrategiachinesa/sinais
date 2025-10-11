@@ -20,16 +20,12 @@ import { SignalResult } from '@/components/app/signal-result';
 import { cn } from '@/lib/utils';
 import { generateSimulatedTradingSignal, type SimulatedTradingSignalOutput } from '@/ai/flows/generate-simulated-trading-signal';
 import { useToast } from '@/hooks/use-toast';
+import { isMarketOpenForAsset } from '@/lib/market-hours';
 
 
 export type Asset = 
-  | 'AUD/CAD' | 'AUD/CAD (OTC)'
-  | 'AUD/JPY' | 'AUD/JPY (OTC)'
-  | 'AUD/USD' | 'AUD/USD (OTC)'
-  | 'EUR/GBP' | 'EUR/GBP (OTC)'
-  | 'EUR/JPY' | 'EUR/JPY (OTC)'
   | 'EUR/USD' | 'EUR/USD (OTC)'
-  | 'USD/JPY' | 'USD/JPY (OTC)';
+  | 'EUR/JPY' | 'EUR/JPY (OTC)';
 
 export type FormData = {
   asset: Asset;
@@ -56,12 +52,25 @@ export default function AnalisadorPage() {
   const [signalData, setSignalData] = useState<SignalData | null>(null);
   const { toast } = useToast();
   const [showOTC, setShowOTC] = useState(false);
+  const [isMarketOpen, setIsMarketOpen] = useState(true);
 
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/USD',
     expirationTime: '1m',
   });
   const telegramLink = 'https://t.me/TraderChinesVIP';
+
+  useEffect(() => {
+    // Check market status whenever the selected asset changes
+    const checkMarketStatus = () => {
+        setIsMarketOpen(isMarketOpenForAsset(formData.asset));
+    };
+    checkMarketStatus();
+    // Re-check every 10 seconds
+    const interval = setInterval(checkMarketStatus, 10000); 
+    return () => clearInterval(interval);
+  }, [formData.asset]);
+
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -204,6 +213,7 @@ export default function AnalisadorPage() {
                 isLoading={appState === 'loading'}
                 showOTC={showOTC}
                 setShowOTC={setShowOTC}
+                isMarketOpen={isMarketOpen}
               />
              ) : (
               signalData && <SignalResult data={signalData} onReset={handleReset} />

@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { BarChart, Loader2 } from 'lucide-react';
+import { BarChart, Loader2, Lock } from 'lucide-react';
 import type { FormData, Asset } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
 import { Label } from '@/components/ui/label';
@@ -22,30 +22,31 @@ type SignalFormProps = {
   isLoading: boolean;
   showOTC: boolean;
   setShowOTC: (show: boolean) => void;
+  isMarketOpen: boolean;
 };
 
 const allAssets: Asset[] = [
-  'AUD/CAD', 'AUD/CAD (OTC)',
-  'AUD/JPY', 'AUD/JPY (OTC)',
-  'AUD/USD', 'AUD/USD (OTC)',
-  'EUR/GBP', 'EUR/GBP (OTC)',
-  'EUR/JPY', 'EUR/JPY (OTC)',
   'EUR/USD', 'EUR/USD (OTC)',
-  'USD/JPY', 'USD/JPY (OTC)',
-].sort((a, b) => a.localeCompare(b));
+  'EUR/JPY', 'EUR/JPY (OTC)',
+];
 
 
-export function SignalForm({ formData, setFormData, onSubmit, isLoading, showOTC, setShowOTC }: SignalFormProps) {
+export function SignalForm({ formData, setFormData, onSubmit, isLoading, showOTC, setShowOTC, isMarketOpen }: SignalFormProps) {
   
   const assets = showOTC ? allAssets : allAssets.filter(a => !a.includes('(OTC)'));
 
   useEffect(() => {
     // If OTC is turned off and an OTC asset is selected, reset to a default non-OTC asset
     if (!showOTC && formData.asset.includes('(OTC)')) {
-      const defaultAsset = assets.find(a => !a.includes('(OTC)')) || 'EUR/USD';
-      setFormData({ ...formData, asset: defaultAsset as Asset });
+      setFormData({ ...formData, asset: 'EUR/USD' });
+    } else if (showOTC && !formData.asset.includes('(OTC)')) {
+        // Optional: switch to the OTC version of the current asset if available
+        const otcVersion = `${formData.asset} (OTC)` as Asset;
+        if (allAssets.includes(otcVersion)) {
+            // setFormData({ ...formData, asset: otcVersion });
+        }
     }
-  }, [showOTC, formData, setFormData, assets]);
+  }, [showOTC, formData, setFormData]);
 
   
   return (
@@ -123,14 +124,16 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading, showOTC
         size="lg"
         className="w-full h-14 text-lg font-bold bg-blue-600 hover:bg-blue-700 text-primary-foreground"
         onClick={onSubmit}
-        disabled={isLoading}
+        disabled={isLoading || !isMarketOpen}
       >
         {isLoading ? (
           <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+        ) : !isMarketOpen ? (
+          <Lock className="mr-2 h-5 w-5" />
         ) : (
           <BarChart className="mr-2 h-5 w-5" />
         )}
-        {isLoading ? 'Analisando...' : 'Analisar Mercado'}
+        {isLoading ? 'Analisando...' : !isMarketOpen ? 'Mercado Fechado' : 'Analisar Mercado'}
       </Button>
     </div>
   );
