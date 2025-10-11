@@ -27,9 +27,8 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
     }
     if (data.operationStatus === 'active' && data.operationCountdown !== null && data.operationCountdown > 0) {
         
-        const isPurchaseTimeOver = data.expirationTime === '1m' 
-            ? data.operationCountdown <= 29 
-            : data.operationCountdown <= 299; 
+        // Purchase time is over when countdown is <= 29 seconds for both 1m and 5m signals.
+        const isPurchaseTimeOver = data.operationCountdown <= 29;
 
         const isBlinking = data.operationCountdown <= 3;
 
