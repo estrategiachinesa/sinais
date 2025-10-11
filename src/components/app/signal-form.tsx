@@ -85,7 +85,7 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
 
       <Button
         size="lg"
-        className="w-full h-14 text-lg font-bold bg-accent hover:bg-accent/90 text-accent-foreground"
+        className="w-full h-14 text-lg font-bold bg-blue-600 hover:bg-blue-700 text-primary-foreground"
         onClick={onSubmit}
         disabled={isLoading}
       >
