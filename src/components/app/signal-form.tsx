@@ -12,15 +12,19 @@ import { BarChart, Loader2 } from 'lucide-react';
 import type { FormData, Asset } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { useEffect } from 'react';
 
 type SignalFormProps = {
   formData: FormData;
   setFormData: (data: FormData) => void;
   onSubmit: () => void;
   isLoading: boolean;
+  showOTC: boolean;
+  setShowOTC: (show: boolean) => void;
 };
 
-const assets: Asset[] = [
+const allAssets: Asset[] = [
   'AUD/CAD', 'AUD/CAD (OTC)',
   'AUD/JPY', 'AUD/JPY (OTC)',
   'AUD/USD', 'AUD/USD (OTC)',
@@ -28,9 +32,22 @@ const assets: Asset[] = [
   'EUR/JPY', 'EUR/JPY (OTC)',
   'EUR/USD', 'EUR/USD (OTC)',
   'USD/JPY', 'USD/JPY (OTC)',
-];
+].sort((a, b) => a.localeCompare(b));
 
-export function SignalForm({ formData, setFormData, onSubmit, isLoading }: SignalFormProps) {
+
+export function SignalForm({ formData, setFormData, onSubmit, isLoading, showOTC, setShowOTC }: SignalFormProps) {
+  
+  const assets = showOTC ? allAssets : allAssets.filter(a => !a.includes('(OTC)'));
+
+  useEffect(() => {
+    // If OTC is turned off and an OTC asset is selected, reset to a default non-OTC asset
+    if (!showOTC && formData.asset.includes('(OTC)')) {
+      const defaultAsset = assets.find(a => !a.includes('(OTC)')) || 'EUR/USD';
+      setFormData({ ...formData, asset: defaultAsset as Asset });
+    }
+  }, [showOTC, formData, setFormData, assets]);
+
+  
   return (
     <div className="w-full space-y-8 text-center">
       <div>
@@ -43,6 +60,18 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading }: Signa
       </div>
 
       <div className="space-y-4 text-left">
+        <div className="flex justify-between items-center">
+           <Label htmlFor="otc-switch" className="flex flex-col">
+            <span>Incluir ativos (OTC)</span>
+            <span className="text-xs text-muted-foreground">Mercado de balcão</span>
+          </Label>
+          <Switch
+            id="otc-switch"
+            checked={showOTC}
+            onCheckedChange={setShowOTC}
+            disabled={isLoading}
+          />
+        </div>
         <div className="space-y-2">
           <Label htmlFor="asset-select">Ativo:</Label>
           <Select
