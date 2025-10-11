@@ -29,7 +29,7 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
         
         const isPurchaseTimeOver = data.expirationTime === '1m' 
             ? data.operationCountdown <= 29 
-            : data.operationCountdown <= 299; // Rule for 5 min is 300s, so until 299s it is open.
+            : data.operationCountdown <= 299; 
 
         const isBlinking = data.operationCountdown <= 3;
 
@@ -37,7 +37,7 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
           <p>
             Finalizando em:{' '}
             <span className={cn(
-                isPurchaseTimeOver ? 'text-blue-400' : 'text-red-500',
+                isPurchaseTimeOver ? 'text-red-500' : 'text-blue-400',
                 isBlinking && 'animate-pulse'
             )}>
               {formatTime(data.operationCountdown)}
