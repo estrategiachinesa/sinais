@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -54,12 +55,14 @@ export default function AnalisadorPage() {
   const { toast } = useToast();
   const [showOTC, setShowOTC] = useState(false);
   const [isMarketOpen, setIsMarketOpen] = useState(true);
+  const [showLimitDialog, setShowLimitDialog] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/USD',
     expirationTime: '1m',
   });
   const telegramLink = 'https://t.me/TraderChinesVIP';
+  const indicatorLink = 'https://traderchines.github.io/vip/';
 
   useEffect(() => {
     // Check market status whenever the selected asset changes
@@ -144,6 +147,14 @@ export default function AnalisadorPage() {
 
 
  const handleAnalyze = async () => {
+    const today = new Date().toDateString();
+    const lastSignalDate = localStorage.getItem('ultimoSinal');
+
+    if (lastSignalDate === today) {
+      setShowLimitDialog(true);
+      return;
+    }
+    
     setAppState('loading');
     const expirationTimeLabel = formData.expirationTime === '1m' ? '1 minute' : '5 minutes';
     
@@ -208,6 +219,7 @@ export default function AnalisadorPage() {
       operationStatus: 'pending'
     });
 
+    localStorage.setItem('ultimoSinal', today);
     setAppState('result');
   };
 
@@ -267,6 +279,25 @@ export default function AnalisadorPage() {
           <p className="max-w-xl mx-auto">Aviso Legal: Todas as estratégias e investimentos envolvem risco de perda. Nenhuma informação contida neste produto deve ser interpretada como uma garantia de resultados.</p>
         </footer>
       </div>
+
+       <AlertDialog open={showLimitDialog} onOpenChange={setShowLimitDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Limite diário atingido</AlertDialogTitle>
+            <AlertDialogDescription>
+              Você já recebeu o sinal gratuito de hoje. Volte amanhã ou ative o Indicador da Estratégia Chinesa para ter acesso ilimitado.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Fechar</AlertDialogCancel>
+            <AlertDialogAction asChild>
+                <a href={indicatorLink} target="_blank" rel="noopener noreferrer">
+                    Quero o Indicador
+                </a>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
