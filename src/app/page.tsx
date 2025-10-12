@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, AlertTriangle, Loader2, Send } from 'lucide-react';
+import { ExternalLink, AlertTriangle, Loader2, Send, PlayCircle } from 'lucide-react';
 import { CustomVideoPlayer } from '@/components/app/custom-video-player';
+import { cn } from '@/lib/utils';
 
 
 export default function GatePage() {
@@ -12,6 +13,7 @@ export default function GatePage() {
   const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
   const telegramLink = 'https://t.me/TraderChinesVIP';
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   const handleClick = () => {
     setIsRedirecting(true);
@@ -22,6 +24,10 @@ export default function GatePage() {
     setTimeout(() => {
       router.push('/analisador');
     }, 2000);
+  };
+
+  const handleShowVideo = () => {
+    setShowVideo(true);
   };
 
   return (
@@ -61,23 +67,37 @@ export default function GatePage() {
               </p>
             )}
 
-            <div className="space-y-4 pt-6">
-              <h2 className="text-lg font-semibold text-yellow-500">
+            <Button 
+                variant="ghost" 
+                onClick={handleShowVideo}
+                className={cn(
+                    "w-full text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10",
+                    showVideo && "hidden"
+                )}
+            >
+                <PlayCircle className="mr-2 h-5 w-5" />
                 Instruções
-              </h2>
-              <div className="aspect-video w-full rounded-lg overflow-hidden">
-                <CustomVideoPlayer url="https://youtube.com/shorts/m3rJjnZeG8o" />
-              </div>
-               <a
-                href={telegramLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex flex-col items-center text-foreground/80 hover:text-foreground transition-colors"
-              >
-                <Send className="h-8 w-8" />
-                <span className="text-xs mt-1">entre no canal do telegram</span>
-              </a>
-            </div>
+            </Button>
+
+            {showVideo && (
+                <div className="space-y-4 pt-6">
+                <h2 className="text-lg font-semibold text-yellow-500">
+                    Instruções
+                </h2>
+                <div className="aspect-video w-full rounded-lg overflow-hidden">
+                    <CustomVideoPlayer url="https://youtube.com/shorts/m3rJjnZeG8o" />
+                </div>
+                <a
+                    href={telegramLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex flex-col items-center text-foreground/80 hover:text-foreground transition-colors"
+                >
+                    <Send className="h-8 w-8" />
+                    <span className="text-xs mt-1">entre no canal do telegram</span>
+                </a>
+                </div>
+            )}
           </div>
         </main>
         <footer className="w-full text-center text-[0.6rem] text-foreground/50 p-4">
