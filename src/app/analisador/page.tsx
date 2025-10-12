@@ -12,14 +12,12 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
-import { AnimatedBackground } from '@/components/app/animated-background';
 import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { ExternalLink, Download, Send } from 'lucide-react';
 import { SignalResult } from '@/components/app/signal-result';
 import { cn } from '@/lib/utils';
-import { generateSimulatedTradingSignal, type SimulatedTradingSignalOutput } from '@/ai/flows/generate-simulated-trading-signal';
 import { useToast } from '@/hooks/use-toast';
 import { isMarketOpenForAsset } from '@/lib/market-hours';
 
@@ -40,14 +38,50 @@ export type SignalData = {
   expirationTime: '1m' | '5m';
   signal: 'CALL 🔼' | 'PUT 🔽';
   targetTime: string;
-  source: 'IA' | 'Aleatório';
-  targetDate: Date; // Keep the full date object for precise calculations
+  source: 'Aleatório';
+  targetDate: Date;
   countdown: number | null;
   operationCountdown: number | null;
   operationStatus: OperationStatus;
 };
 
 type AppState = 'idle' | 'loading' | 'result';
+
+// Client-side signal generation
+function generateClientSideSignal(expirationTimeLabel: '1 minute' | '5 minutes') {
+    const now = new Date();
+    let targetTime: Date;
+
+    if (expirationTimeLabel === '1 minute') {
+        const nextMinute = new Date(now);
+        nextMinute.setSeconds(0, 0);
+        nextMinute.setMinutes(nextMinute.getMinutes() + 1);
+        targetTime = nextMinute;
+    } else { // 5 minutes
+        const minutes = now.getMinutes();
+        const remainder = minutes % 5;
+        const minutesToAdd = 5 - remainder;
+        targetTime = new Date(now.getTime());
+        targetTime.setMinutes(minutes + minutesToAdd, 0, 0);
+        // If target time is in the past, move to the next 5-minute interval
+        if (targetTime.getTime() < now.getTime()) {
+            targetTime.setMinutes(targetTime.getMinutes() + 5);
+        }
+    }
+
+    const targetTimeString = targetTime.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    return {
+        signal: (Math.random() < 0.5 ? 'CALL 🔼' : 'PUT 🔽') as 'CALL 🔼' | 'PUT 🔽',
+        targetTime: targetTimeString,
+        source: 'Aleatório' as const,
+    };
+}
+
 
 export default function AnalisadorPage() {
   const [appState, setAppState] = useState<AppState>('idle');
@@ -113,7 +147,6 @@ export default function AnalisadorPage() {
                 ...prevData,
                 countdown: 0,
                 operationStatus: 'active',
-                // Set the initial operation countdown based on the target time + duration
                 operationCountdown: operationDuration
               };
             }
@@ -136,14 +169,13 @@ export default function AnalisadorPage() {
         });
       };
       
-      // Call immediately to avoid 1-second initial delay
       updateCountdowns(); 
       
       timer = setInterval(updateCountdowns, 1000);
 
     }
     return () => clearInterval(timer);
-  }, [appState, signalData?.operationStatus]); // Re-trigger when status changes
+  }, [appState, signalData?.operationStatus]);
 
 
  const handleAnalyze = async () => {
@@ -158,46 +190,10 @@ export default function AnalisadorPage() {
     setAppState('loading');
     const expirationTimeLabel = formData.expirationTime === '1m' ? '1 minute' : '5 minutes';
     
-    let result: Omit<SimulatedTradingSignalOutput, 'source'> & { source: 'IA' | 'Aleatório' };
+    // Simulate loading
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
-    try {
-        result = await generateSimulatedTradingSignal({ 
-          asset: formData.asset,
-          expirationTime: expirationTimeLabel 
-        });
-    } catch (error) {
-        console.error("AI signal generation failed, using fallback.", error);
-
-        // Fallback to random signal generation
-        const now = new Date();
-        let targetTime: Date;
-
-        if (expirationTimeLabel === '1 minute') {
-            targetTime = new Date(now.getTime());
-            targetTime.setMinutes(now.getMinutes() + 1, 0, 0);
-        } else { // 5 minutes
-            const minutes = now.getMinutes();
-            const remainder = minutes % 5;
-            const minutesToAdd = 5 - remainder;
-            targetTime = new Date(now.getTime());
-            targetTime.setMinutes(minutes + minutesToAdd, 0, 0);
-             if (targetTime.getTime() < now.getTime()) {
-                targetTime.setMinutes(targetTime.getMinutes() + 5);
-             }
-        }
-
-        const targetTimeString = targetTime.toLocaleTimeString('en-US', {
-            hour12: false,
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-
-        result = {
-            signal: Math.random() < 0.5 ? 'CALL 🔼' : 'PUT 🔽',
-            targetTime: targetTimeString,
-            source: 'Aleatório'
-        };
-    }
+    const result = generateClientSideSignal(expirationTimeLabel);
     
     const [hours, minutes] = result.targetTime.split(':');
     let targetDate = new Date();
@@ -213,8 +209,8 @@ export default function AnalisadorPage() {
       signal: result.signal,
       targetTime: result.targetTime,
       source: result.source,
-      targetDate: targetDate, // Store the full date object
-      countdown: null, // Let the useEffect handle the initial calculation
+      targetDate: targetDate,
+      countdown: null,
       operationCountdown: null,
       operationStatus: 'pending'
     });
@@ -230,7 +226,7 @@ export default function AnalisadorPage() {
 
   return (
     <>
-      <AnimatedBackground />
+      <div className="fixed inset-0 -z-10 h-full w-full bg-background"></div>
       <div className="flex flex-col min-h-screen">
         <header className="p-4 flex justify-center">
           <OnlineTraders />

@@ -2,7 +2,7 @@
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Brain, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import type { SignalData } from '@/app/analisador/page';
 import { CurrencyFlags } from './currency-flags';
 import { cn } from '@/lib/utils';
@@ -63,11 +63,6 @@ export function SignalResult({ data, onReset }: SignalResultProps) {
         <CardHeader>
           <CardTitle className="text-2xl flex items-center justify-between">
             <span>🔔 Sinal Gerado!</span>
-             {data.source === 'IA' && (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground" title="Sinal gerado por Inteligência Artificial">
-                <Brain className="h-4 w-4" />
-              </div>
-            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-lg">

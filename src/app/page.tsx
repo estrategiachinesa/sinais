@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, AlertTriangle, Loader2, Send } from 'lucide-react';
-import { AnimatedBackground } from '@/components/app/animated-background';
 import { CustomVideoPlayer } from '@/components/app/custom-video-player';
 
 
@@ -27,7 +26,7 @@ export default function GatePage() {
 
   return (
     <>
-      <AnimatedBackground />
+      <div className="fixed inset-0 -z-10 h-full w-full bg-background"></div>
       <div className="flex flex-col min-h-screen">
         <main className="flex-grow flex items-center justify-center text-center p-4">
           <div className="w-full max-w-lg space-y-6">
