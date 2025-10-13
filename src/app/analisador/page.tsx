@@ -47,10 +47,20 @@ export type SignalData = {
 
 type AppState = 'idle' | 'loading' | 'result';
 
+// Seeded pseudo-random number generator
+function seededRandom(seed: number) {
+    var x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+}
+
 // Client-side signal generation
 function generateClientSideSignal(expirationTimeLabel: '1 minute' | '5 minutes') {
     const now = new Date();
     let targetTime: Date;
+
+    // Use the current minute as a seed for all users
+    const seed = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()).getTime();
+    const randomValue = seededRandom(seed);
 
     if (expirationTimeLabel === '1 minute') {
         const nextMinute = new Date(now);
@@ -76,7 +86,7 @@ function generateClientSideSignal(expirationTimeLabel: '1 minute' | '5 minutes')
     });
 
     return {
-        signal: (Math.random() < 0.5 ? 'CALL 🔼' : 'PUT 🔽') as 'CALL 🔼' | 'PUT 🔽',
+        signal: (randomValue < 0.5 ? 'CALL 🔼' : 'PUT 🔽') as 'CALL 🔼' | 'PUT 🔽',
         targetTime: targetTimeString,
         source: 'Aleatório' as const,
     };
