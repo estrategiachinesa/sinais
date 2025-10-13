@@ -16,7 +16,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: 'Estratégia Chinesa',
-  description: 'Receba sinais de trading simulados em tempo real.',
+  description: 'Receba sinais gratuitos da Estratégia Chinesa em tempo real',
 };
 
 export default function RootLayout({
