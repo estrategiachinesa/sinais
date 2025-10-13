@@ -49,19 +49,45 @@ type AppState = 'idle' | 'loading' | 'result';
 
 // Seeded pseudo-random number generator
 function seededRandom(seed: number) {
-    var x = Math.sin(seed) * 10000;
+    const x = Math.sin(seed) * 10000;
     return x - Math.floor(x);
 }
 
-// Client-side signal generation
-function generateClientSideSignal(expirationTimeLabel: '1 minute' | '5 minutes') {
+// Client-side signal generation with market correlation
+function generateClientSideSignal(asset: Asset, expirationTimeLabel: '1 minute' | '5 minutes') {
     const now = new Date();
+    
+    // 1. Define a semente principal para o minuto atual (consistente para todos)
+    const minuteSeed = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()).getTime();
+
+    // 2. Determina a "tendência geral do mercado" para este minuto
+    const marketTrendSeed = minuteSeed; // Usa a semente do minuto
+    const marketTrendRandom = seededRandom(marketTrendSeed);
+    const generalMarketSignal = marketTrendRandom < 0.5 ? 'CALL 🔼' : 'PUT 🔽';
+
+    // 3. Gera um sinal independente para o ativo específico
+    // Adiciona uma string do ativo para criar uma semente única para o par
+    const assetSpecificSeed = minuteSeed + asset.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const assetRandom = seededRandom(assetSpecificSeed);
+    const independentSignal = assetRandom < 0.5 ? 'CALL 🔼' : 'PUT 🔽';
+
+    // 4. Decide se o ativo seguirá a tendência do mercado ou seu sinal independente
+    const correlationSeed = minuteSeed + 1; // Semente ligeiramente diferente para a decisão de correlação
+    const correlationRandom = seededRandom(correlationSeed);
+    
+    let finalSignal: 'CALL 🔼' | 'PUT 🔽';
+    const correlationChance = 0.3; // 30% de chance de seguir a tendência do mercado
+
+    if (correlationRandom < correlationChance) {
+        // Segue a tendência geral do mercado
+        finalSignal = generalMarketSignal;
+    } else {
+        // Segue a análise independente (70% de chance)
+        finalSignal = independentSignal;
+    }
+
+    // 5. Calcula o tempo de expiração
     let targetTime: Date;
-
-    // Use the current minute as a seed for all users
-    const seed = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()).getTime();
-    const randomValue = seededRandom(seed);
-
     if (expirationTimeLabel === '1 minute') {
         const nextMinute = new Date(now);
         nextMinute.setSeconds(0, 0);
@@ -73,7 +99,6 @@ function generateClientSideSignal(expirationTimeLabel: '1 minute' | '5 minutes')
         const minutesToAdd = 5 - remainder;
         targetTime = new Date(now.getTime());
         targetTime.setMinutes(minutes + minutesToAdd, 0, 0);
-        // If target time is in the past, move to the next 5-minute interval
         if (targetTime.getTime() < now.getTime()) {
             targetTime.setMinutes(targetTime.getMinutes() + 5);
         }
@@ -86,7 +111,7 @@ function generateClientSideSignal(expirationTimeLabel: '1 minute' | '5 minutes')
     });
 
     return {
-        signal: (randomValue < 0.5 ? 'CALL 🔼' : 'PUT 🔽') as 'CALL 🔼' | 'PUT 🔽',
+        signal: finalSignal,
         targetTime: targetTimeString,
         source: 'Aleatório' as const,
     };
@@ -203,7 +228,7 @@ export default function AnalisadorPage() {
     // Simulate loading
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const result = generateClientSideSignal(expirationTimeLabel);
+    const result = generateClientSideSignal(formData.asset, expirationTimeLabel);
     
     const [hours, minutes] = result.targetTime.split(':');
     let targetDate = new Date();
