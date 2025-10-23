@@ -17,6 +17,8 @@ import { SignalForm } from '@/components/app/signal-form';
 import { SignalResult } from '@/components/app/signal-result';
 import { useToast } from '@/hooks/use-toast';
 import { isMarketOpenForAsset } from '@/lib/market-hours';
+import { Button } from '@/components/ui/button';
+import { Download, ExternalLink } from 'lucide-react';
 
 
 export type Asset = 
@@ -337,17 +339,19 @@ export default function AnalisadorPage() {
                 Não encontramos seu cadastro no sistema. É preciso se cadastrar e realizar um depósito de qualquer valor para gerar os sinais.
                 </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogAction asChild>
-                    <a href={indicatorLink} target="_blank" rel="noopener noreferrer">
-                        Baixar o indicador
-                    </a>
-                </AlertDialogAction>
-                <AlertDialogAction asChild>
+            <AlertDialogFooter className="flex-col !space-x-0 gap-2 sm:!flex-col sm:!space-x-0 sm:gap-2">
+                 <Button asChild className='w-full bg-blue-600 hover:bg-blue-700'>
                     <a href={affiliateLink} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="mr-2 h-4 w-4" />
                         Cadastrar agora
                     </a>
-                </AlertDialogAction>
+                </Button>
+                <Button asChild className='w-full bg-green-600 hover:bg-green-700'>
+                    <a href={indicatorLink} target="_blank" rel="noopener noreferrer">
+                       <Download className="mr-2 h-4 w-4" />
+                       Baixar o indicador
+                    </a>
+                </Button>
             </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
