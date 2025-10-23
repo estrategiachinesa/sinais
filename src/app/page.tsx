@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, AlertTriangle, Loader2, Send, PlayCircle } from 'lucide-react';
+import { ExternalLink, AlertTriangle, Loader2, PlayCircle } from 'lucide-react';
 import { CustomVideoPlayer } from '@/components/app/custom-video-player';
 import { cn } from '@/lib/utils';
 
@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils';
 export default function GatePage() {
   const router = useRouter();
   const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
-  const telegramLink = 'https://t.me/TraderChinesVIP';
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
 
@@ -87,15 +86,6 @@ export default function GatePage() {
                 <div className="aspect-video w-full rounded-lg overflow-hidden">
                     <CustomVideoPlayer url="https://youtube.com/shorts/m3rJjnZeG8o" />
                 </div>
-                <a
-                    href={telegramLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex flex-col items-center text-foreground/80 hover:text-foreground transition-colors"
-                >
-                    <Send className="h-8 w-8" />
-                    <span className="text-xs mt-1">entre no canal do telegram</span>
-                </a>
                 </div>
             )}
           </div>

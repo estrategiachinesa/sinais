@@ -14,10 +14,7 @@ import {
 
 import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { ExternalLink, Download, Send } from 'lucide-react';
 import { SignalResult } from '@/components/app/signal-result';
-import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { isMarketOpenForAsset } from '@/lib/market-hours';
 
@@ -130,7 +127,6 @@ export default function AnalisadorPage() {
     asset: 'EUR/USD',
     expirationTime: '1m',
   });
-  const telegramLink = 'https://t.me/TraderChinesVIP';
   const indicatorLink = 'https://traderchines.github.io/vip/';
 
   useEffect(() => {
@@ -290,18 +286,6 @@ export default function AnalisadorPage() {
               signalData && <SignalResult data={signalData} onReset={handleReset} />
              )}
           </div>
-           <a
-            href={telegramLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              buttonVariants({ variant: 'ghost', size: 'sm' }),
-              'flex flex-col h-auto items-center text-foreground/80 hover:text-foreground transition-colors'
-            )}
-          >
-            <Send className="h-8 w-8" />
-            <span className="text-xs mt-1">Canal do Telegram</span>
-          </a>
         </main>
         
         <footer className="p-4 text-center text-[0.6rem] text-foreground/30">
