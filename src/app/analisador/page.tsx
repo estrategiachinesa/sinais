@@ -131,7 +131,7 @@ export default function AnalisadorPage() {
     asset: 'EUR/USD',
     expirationTime: '1m',
   });
-  const indicatorLink = 'https://traderchines.github.io/vip/';
+  const indicatorLink = 'https://estrategiachinesa.github.io/vip/';
   const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
 
   useEffect(() => {
