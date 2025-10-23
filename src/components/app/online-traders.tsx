@@ -4,7 +4,13 @@ import { useState, useEffect } from 'react';
 import { Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export function OnlineTraders() {
+
+type OnlineTradersProps = {
+  isActivated: boolean;
+  onToggle: () => void;
+};
+
+export function OnlineTraders({ isActivated, onToggle }: OnlineTradersProps) {
   const [traderCount, setTraderCount] = useState(0);
 
   useEffect(() => {
@@ -28,9 +34,16 @@ export function OnlineTraders() {
   }
 
   return (
-    <div className="flex items-center gap-2 text-sm text-foreground/80">
+    <div 
+      className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer"
+      onClick={onToggle}
+      title={isActivated ? "Desativar modo secreto" : "Ativar modo secreto"}
+    >
       <span className="relative flex h-2 w-2">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+        <span className={cn(
+            "absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75",
+            isActivated && "animate-ping"
+        )}></span>
         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
       </span>
       <Users className="h-4 w-4" />

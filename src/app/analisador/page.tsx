@@ -122,12 +122,15 @@ export default function AnalisadorPage() {
   const [showOTC, setShowOTC] = useState(false);
   const [isMarketOpen, setIsMarketOpen] = useState(true);
   const [showLimitDialog, setShowLimitDialog] = useState(false);
+  const [showSecretActivationDialog, setShowSecretActivationDialog] = useState(false);
+  const [isSecretActivated, setIsSecretActivated] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/USD',
     expirationTime: '1m',
   });
   const indicatorLink = 'https://traderchines.github.io/vip/';
+  const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
 
   useEffect(() => {
     // Check market status whenever the selected asset changes
@@ -210,6 +213,11 @@ export default function AnalisadorPage() {
 
 
  const handleAnalyze = async () => {
+    if (!isSecretActivated) {
+        setShowSecretActivationDialog(true);
+        return;
+    }
+
     const today = new Date().toDateString();
     const lastSignalDate = localStorage.getItem('ultimoSinal');
 
@@ -254,13 +262,20 @@ export default function AnalisadorPage() {
     setAppState('idle');
     setSignalData(null);
   };
+  
+  const handleSecretToggle = () => {
+    setIsSecretActivated(prev => !prev);
+  }
 
   return (
     <>
       <div className="fixed inset-0 -z-10 h-full w-full bg-background"></div>
       <div className="flex flex-col min-h-screen">
         <header className="p-4 flex justify-center">
-          <OnlineTraders />
+          <OnlineTraders 
+             isActivated={isSecretActivated}
+             onToggle={handleSecretToggle}
+          />
         </header>
 
         <main className="flex-grow flex flex-col items-center justify-center p-4 space-y-6">
@@ -311,6 +326,29 @@ export default function AnalisadorPage() {
                 </a>
             </AlertDialogAction>
           </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showSecretActivationDialog} onOpenChange={setShowSecretActivationDialog}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Falha ao analisar ❌</AlertDialogTitle>
+                <AlertDialogDescription>
+                Não encontramos seu cadastro no sistema. É preciso se cadastrar e realizar um depósito de qualquer valor para gerar os sinais.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogAction asChild>
+                    <a href={indicatorLink} target="_blank" rel="noopener noreferrer">
+                        Baixar o indicador
+                    </a>
+                </AlertDialogAction>
+                <AlertDialogAction asChild>
+                    <a href={affiliateLink} target="_blank" rel="noopener noreferrer">
+                        Cadastrar agora
+                    </a>
+                </AlertDialogAction>
+            </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </>
