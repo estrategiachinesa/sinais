@@ -14,7 +14,7 @@ export function OnlineTraders({ isActivated, onToggle }: OnlineTradersProps) {
   const [traderCount, setTraderCount] = useState(0);
   const [isHolding, setIsHolding] = useState(false);
   const holdTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const HOLD_DURATION = 3000; // 3 seconds
+  const HOLD_DURATION = 2000; // 2 seconds
 
 
   useEffect(() => {
@@ -65,18 +65,6 @@ export function OnlineTraders({ isActivated, onToggle }: OnlineTradersProps) {
       title={isActivated ? "Desativar modo secreto" : "Ativar modo secreto"}
     >
       <div className="relative h-6 w-6 flex items-center justify-center">
-         <svg className="absolute h-full w-full" viewBox="0 0 32 32">
-            <circle
-                className="text-muted/20"
-                strokeWidth="2"
-                stroke="currentColor"
-                fill="transparent"
-                r="14"
-                cx="16"
-                cy="16"
-            />
-        </svg>
-
         <span className="relative flex h-2 w-2">
             <span className={cn(
                 "absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75",
