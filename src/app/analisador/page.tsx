@@ -12,6 +12,16 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+
+
 import { OnlineTraders } from '@/components/app/online-traders';
 import { SignalForm } from '@/components/app/signal-form';
 import { SignalResult } from '@/components/app/signal-result';
@@ -331,15 +341,15 @@ export default function AnalisadorPage() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog open={showSecretActivationDialog} onOpenChange={setShowSecretActivationDialog}>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-                <AlertDialogTitle>Falha ao analisar ❌</AlertDialogTitle>
-                <AlertDialogDescription>
+      <Dialog open={showSecretActivationDialog} onOpenChange={setShowSecretActivationDialog}>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Falha ao analisar ❌</DialogTitle>
+                <DialogDescription>
                 Não encontramos seu cadastro no sistema. É preciso se cadastrar e realizar um depósito de qualquer valor para gerar os sinais.
-                </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter className="flex-col !space-x-0 gap-2 sm:!flex-col sm:!space-x-0 sm:gap-2">
+                </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="flex-col !space-x-0 gap-2 sm:!flex-col sm:!space-x-0 sm:gap-2">
                  <Button asChild className='w-full bg-blue-600 hover:bg-blue-700'>
                     <a href={affiliateLink} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="mr-2 h-4 w-4" />
@@ -352,9 +362,9 @@ export default function AnalisadorPage() {
                        Baixar o indicador
                     </a>
                 </Button>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
