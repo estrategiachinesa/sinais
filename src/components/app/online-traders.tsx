@@ -13,9 +13,7 @@ type OnlineTradersProps = {
 export function OnlineTraders({ isActivated, onToggle }: OnlineTradersProps) {
   const [traderCount, setTraderCount] = useState(0);
   const [isHolding, setIsHolding] = useState(false);
-  const [progress, setProgress] = useState(0);
   const holdTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const progressIntervalRef = useRef<NodeJS.Timer | null>(null);
   const HOLD_DURATION = 3000; // 3 seconds
 
 
@@ -37,28 +35,13 @@ export function OnlineTraders({ isActivated, onToggle }: OnlineTradersProps) {
       onToggle();
       resetHold();
     }, HOLD_DURATION);
-
-    const startTime = Date.now();
-    progressIntervalRef.current = setInterval(() => {
-      const elapsedTime = Date.now() - startTime;
-      const newProgress = Math.min(100, (elapsedTime / HOLD_DURATION) * 100);
-      setProgress(newProgress);
-      if (newProgress >= 100) {
-        clearInterval(progressIntervalRef.current!);
-      }
-    }, 50);
   };
 
   const resetHold = () => {
     setIsHolding(false);
-    setProgress(0);
     if (holdTimeoutRef.current) {
       clearTimeout(holdTimeoutRef.current);
       holdTimeoutRef.current = null;
-    }
-    if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
-        progressIntervalRef.current = null;
     }
   };
 
@@ -71,9 +54,6 @@ export function OnlineTraders({ isActivated, onToggle }: OnlineTradersProps) {
     )
   }
   
-  const circumference = 2 * Math.PI * 14; // 2 * pi * r (radius is 14)
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
-
   return (
     <div 
       className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer select-none"
@@ -95,27 +75,12 @@ export function OnlineTraders({ isActivated, onToggle }: OnlineTradersProps) {
                 cx="16"
                 cy="16"
             />
-            {isHolding && (
-                 <circle
-                    className="text-green-500"
-                    strokeWidth="2"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={strokeDashoffset}
-                    strokeLinecap="round"
-                    stroke="currentColor"
-                    fill="transparent"
-                    r="14"
-                    cx="16"
-                    cy="16"
-                    style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
-                />
-            )}
         </svg>
 
         <span className="relative flex h-2 w-2">
             <span className={cn(
                 "absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75",
-                isActivated && "animate-ping"
+                (isActivated || isHolding) && "animate-ping"
             )}></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
         </span>
