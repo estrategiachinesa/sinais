@@ -21,10 +21,10 @@ export function OnlineTraders({ isActivated, onToggle }: OnlineTradersProps) {
 
   useEffect(() => {
     // Set initial random value on client mount
-    setTraderCount(Math.floor(Math.random() * (400 - 120 + 1)) + 120);
+    setTraderCount(Math.floor(Math.random() * (150 - 50 + 1)) + 50);
 
     const interval = setInterval(() => {
-      setTraderCount(Math.floor(Math.random() * (400 - 120 + 1)) + 120);
+      setTraderCount(Math.floor(Math.random() * (150 - 50 + 1)) + 50);
     }, 10000); // 10 seconds
 
     return () => clearInterval(interval);
