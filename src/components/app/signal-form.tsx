@@ -26,8 +26,8 @@ type SignalFormProps = {
 };
 
 const allAssets: Asset[] = [
-  'EUR/USD', 'EUR/USD (OTC)',
   'EUR/JPY', 'EUR/JPY (OTC)',
+  'EUR/USD', 'EUR/USD (OTC)',
 ];
 
 
@@ -38,7 +38,7 @@ export function SignalForm({ formData, setFormData, onSubmit, isLoading, showOTC
   useEffect(() => {
     // If OTC is turned off and an OTC asset is selected, reset to a default non-OTC asset
     if (!showOTC && formData.asset.includes('(OTC)')) {
-      setFormData({ ...formData, asset: 'EUR/USD' });
+      setFormData({ ...formData, asset: 'EUR/JPY' });
     } else if (showOTC && !formData.asset.includes('(OTC)')) {
         // Optional: switch to the OTC version of the current asset if available
         const otcVersion = `${formData.asset} (OTC)` as Asset;

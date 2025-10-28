@@ -128,7 +128,7 @@ export default function AnalisadorPage() {
   const [isSecretActivated, setIsSecretActivated] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
-    asset: 'EUR/USD',
+    asset: 'EUR/JPY',
     expirationTime: '1m',
   });
   const indicatorLink = 'https://estrategiachinesa.github.io/vip/';
