@@ -145,6 +145,17 @@ export default function AnalisadorPage() {
   });
   const indicatorLink = 'https://estrategiachinesa.github.io/vip/';
   const affiliateLink = 'https://exnova.com/lp/start-trading/?aff=198544&aff_model=revenue&afftrack=';
+  
+  useEffect(() => {
+    const savedState = localStorage.getItem('isSecretActivated');
+    if (savedState) {
+      setIsSecretActivated(JSON.parse(savedState));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('isSecretActivated', JSON.stringify(isSecretActivated));
+  }, [isSecretActivated]);
 
   useEffect(() => {
     // Check market status whenever the selected asset changes
