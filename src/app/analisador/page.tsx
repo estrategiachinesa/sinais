@@ -136,6 +136,8 @@ export default function AnalisadorPage() {
   const [showLimitDialog, setShowLimitDialog] = useState(false);
   const [showSecretActivationDialog, setShowSecretActivationDialog] = useState(false);
   const [isSecretActivated, setIsSecretActivated] = useState(false);
+  const [nextSignalCountdown, setNextSignalCountdown] = useState('');
+
 
   const [formData, setFormData] = useState<FormData>({
     asset: 'EUR/JPY',
@@ -222,6 +224,38 @@ export default function AnalisadorPage() {
     }
     return () => clearInterval(timer);
   }, [appState, signalData?.operationStatus]);
+  
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined;
+
+    if (showLimitDialog) {
+      const calculateCountdown = () => {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+
+        const diff = tomorrow.getTime() - now.getTime();
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        setNextSignalCountdown(
+          `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+        );
+      };
+
+      calculateCountdown();
+      interval = setInterval(calculateCountdown, 1000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [showLimitDialog]);
 
 
  const handleAnalyze = async () => {
@@ -327,7 +361,12 @@ export default function AnalisadorPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Limite diário atingido</AlertDialogTitle>
             <AlertDialogDescription>
-              Você já recebeu o sinal gratuito de hoje. Volte amanhã ou ative o Indicador da Estratégia Chinesa para ter acesso ilimitado.
+               Você já recebeu o sinal gratuito de hoje. Volte amanhã ou
+              ative o Indicador para ter acesso ilimitado.
+              <br />
+              <br />
+              Próximo sinal em:{' '}
+              <span className="font-bold text-yellow-500">{nextSignalCountdown}</span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
